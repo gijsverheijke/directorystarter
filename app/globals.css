@@ -1,0 +1,214 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: theme('colors.white');
+  --foreground: theme('colors.gray.900');
+  --card: theme('colors.white');
+  --card-foreground: theme('colors.gray.900');
+  --popover: theme('colors.white');
+  --popover-foreground: theme('colors.gray.900');
+  --primary: theme('colors.gray.900');
+  --primary-foreground: theme('colors.gray.50');
+  --secondary: theme('colors.gray.100');
+  --secondary-foreground: theme('colors.gray.900');
+  --muted: theme('colors.gray.100');
+  --muted-foreground: theme('colors.gray.500');
+  --accent: theme('colors.gray.100');
+  --accent-foreground: theme('colors.gray.900');
+  --destructive: theme('colors.red.500');
+  --border: theme('colors.gray.200');
+  --input: theme('colors.gray.200');
+  --ring: theme('colors.gray.400');
+  --chart-1: theme('colors.orange.500');
+  --chart-2: theme('colors.blue.500');
+  --chart-3: theme('colors.indigo.700');
+  --chart-4: theme('colors.yellow.400');
+  --chart-5: theme('colors.orange.400');
+  --sidebar: theme('colors.gray.50');
+  --sidebar-foreground: theme('colors.gray.900');
+  --sidebar-primary: theme('colors.gray.900');
+  --sidebar-primary-foreground: theme('colors.gray.50');
+  --sidebar-accent: theme('colors.gray.100');
+  --sidebar-accent-foreground: theme('colors.gray.900');
+  --sidebar-border: theme('colors.gray.200');
+  --sidebar-ring: theme('colors.gray.400');
+}
+
+.dark {
+  --background: theme('colors.gray.900');
+  --foreground: theme('colors.gray.50');
+  --card: theme('colors.gray.800');
+  --card-foreground: theme('colors.gray.50');
+  --popover: theme('colors.gray.800');
+  --popover-foreground: theme('colors.gray.50');
+  --primary: theme('colors.gray.50');
+  --primary-foreground: theme('colors.gray.900');
+  --secondary: theme('colors.gray.700');
+  --secondary-foreground: theme('colors.gray.50');
+  --muted: theme('colors.gray.700');
+  --muted-foreground: theme('colors.gray.400');
+  --accent: theme('colors.gray.700');
+  --accent-foreground: theme('colors.gray.50');
+  --destructive: theme('colors.red.600');
+  --border: theme('colors.gray.800');
+  --input: theme('colors.gray.700');
+  --ring: theme('colors.gray.500');
+  --chart-1: theme('colors.violet.500');
+  --chart-2: theme('colors.emerald.500');
+  --chart-3: theme('colors.orange.400');
+  --chart-4: theme('colors.purple.500');
+  --chart-5: theme('colors.red.400');
+  --sidebar: theme('colors.gray.800');
+  --sidebar-foreground: theme('colors.gray.50');
+  --sidebar-primary: theme('colors.violet.500');
+  --sidebar-primary-foreground: theme('colors.gray.50');
+  --sidebar-accent: theme('colors.gray.700');
+  --sidebar-accent-foreground: theme('colors.gray.50');
+  --sidebar-border: theme('colors.gray.800');
+  --sidebar-ring: theme('colors.gray.500');
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Typography Classes */
+  .heading-1 {
+    @apply text-4xl font-bold text-foreground;
+  }
+  
+  .heading-2 {
+    @apply text-3xl font-semibold text-foreground;
+  }
+  
+  .heading-3 {
+    @apply text-2xl font-medium text-foreground;
+  }
+  
+  .heading-4 {
+    @apply text-xl font-medium text-foreground;
+  }
+  
+  .body-text {
+    @apply text-base text-foreground;
+  }
+  
+  .body-text-large {
+    @apply text-lg text-foreground;
+  }
+  
+  .body-text-small {
+    @apply text-sm text-foreground;
+  }
+  
+  .caption {
+    @apply text-sm text-muted-foreground;
+  }
+  
+  .label {
+    @apply text-sm font-medium text-foreground;
+  }
+  
+  .code {
+    @apply text-sm font-mono bg-muted px-1.5 py-0.5 rounded;
+  }
+
+  /* Interactive Elements - Cursor Styling */
+  .clickable {
+    @apply cursor-pointer;
+  }
+}
+
+@layer base {
+  /* Ensure all interactive elements have proper cursor */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  label[for],
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled),
+  select:not(:disabled),
+  [tabindex]:not([tabindex="-1"]):not([aria-disabled="true"]),
+  [data-clickable="true"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+  
+  button:disabled,
+  [role="button"]:disabled,
+  [role="button"][aria-disabled="true"],
+  input:disabled,
+  select:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+  
+  /* Prevent text cursor on non-editable elements */
+  span,
+  div,
+  p,
+  h1, h2, h3, h4, h5, h6 {
+    cursor: default;
+  }
+  
+  /* Explicitly set text cursor only for text input elements */
+  input[type="text"],
+  input[type="email"], 
+  input[type="password"],
+  input[type="search"],
+  input[type="url"],
+  input[type="tel"],
+  textarea,
+  [contenteditable="true"] {
+    cursor: text;
+  }
+}
