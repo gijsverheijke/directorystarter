@@ -70,25 +70,7 @@ export default function ListingsPage() {
         </div>
       )}
 
-      <div className="mt-15 text-center space-y-5">
-        <p className="text-muted-foreground">
-          Looking for something specific? Browse by category or tag.
-        </p>
-        <div className="flex justify-center gap-5">
-          <a
-            href="/categories"
-            className="text-primary hover:text-primary/80 transition-colors font-medium"
-          >
-            Browse Categories →
-          </a>
-          <a
-            href="/tags"
-            className="text-primary hover:text-primary/80 transition-colors font-medium"
-          >
-            Browse Tags →
-          </a>
-        </div>
-      </div>
+      
     </div>
   )
 }
