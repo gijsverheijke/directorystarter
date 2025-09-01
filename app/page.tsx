@@ -18,7 +18,7 @@ export default function Home() {
           <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-chart-2/25 blur-3xl" />
           <div className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-chart-3/20 blur-2xl" />
           <div className="relative mx-auto max-w-2xl text-center">
-            <h1 className="heading-1 mb-5">{title}</h1>
+            <h1 className="hero-text mb-10">{title}</h1>
             <h2 className="heading-2 element-spacing text-muted-foreground">{h2}</h2>
             <div className="max-w-xl mx-auto mt-20">
               <SearchBar />
