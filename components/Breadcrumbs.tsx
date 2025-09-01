@@ -11,13 +11,14 @@ interface BreadcrumbsProps {
 export default function Breadcrumbs({ breadcrumbs }: BreadcrumbsProps) {
   return <Breadcrumb>
     <BreadcrumbList>
-      <BreadcrumbItem>
-        <BreadcrumbLink href={breadcrumbs[0].href}>{breadcrumbs[0].label}</BreadcrumbLink>
-      </BreadcrumbItem>
-      <BreadcrumbSeparator />
-      <BreadcrumbItem>
-        <BreadcrumbLink href={breadcrumbs[1].href}>{breadcrumbs[1].label}</BreadcrumbLink>
-      </BreadcrumbItem>
+      {breadcrumbs.map((breadcrumb, index) => (
+        <div key={breadcrumb.href} className="flex items-center">
+          <BreadcrumbItem>
+            <BreadcrumbLink href={breadcrumb.href}>{breadcrumb.label}</BreadcrumbLink>
+          </BreadcrumbItem>
+          {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
+        </div>
+      ))}
     </BreadcrumbList>
   </Breadcrumb>
 }

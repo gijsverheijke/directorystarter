@@ -13,20 +13,20 @@ export default function ListingCard({ listing }: ListingCardProps) {
     return title.charAt(0).toUpperCase();
   };
 
+  const listingSlug = listing.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+
   return (
     <Card className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/20 group relative overflow-hidden">
       <Link 
-        href={listing.url} 
-        target="_blank" 
-        rel="noopener noreferrer"
+        href={`/listings/${listingSlug}`}
         className="absolute inset-0 z-10"
-        aria-label={`Visit ${listing.title}`}
+        aria-label={`View ${listing.title} details`}
       >
-        <span className="sr-only">Visit {listing.title}</span>
+        <span className="sr-only">View {listing.title} details</span>
       </Link>
       
       <CardContent className="px-5 relative">
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-5">
           <Avatar className="size-8 flex-shrink-0">
             <AvatarImage src={listing.logo} alt={listing.title} />
             <AvatarFallback className="bg-primary text-primary-foreground font-medium text-xs">

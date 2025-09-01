@@ -122,6 +122,31 @@
 }
 
 @layer components {
+  /* DRY Spacing System - Multiples of 5 */
+  .container-spacing {
+    @apply container mx-auto px-5 py-10;
+  }
+  
+  .page-spacing {
+    @apply px-5 py-10;
+  }
+  
+  .section-spacing {
+    @apply mb-10;
+  }
+  
+  .element-spacing {
+    @apply mb-5;
+  }
+  
+  .small-spacing {
+    @apply gap-5;
+  }
+  
+  .large-spacing {
+    @apply gap-10;
+  }
+
   /* Typography Classes */
   .heading-1 {
     @apply text-4xl font-bold text-foreground;

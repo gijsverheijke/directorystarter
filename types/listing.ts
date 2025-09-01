@@ -2,7 +2,7 @@ export interface Listing {
   title: string
   blurb: string
   description: string
-  url: string
+  externalUrl: string
   logo: string
   category: string
   tags: string[]

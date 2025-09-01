@@ -39,11 +39,11 @@ export default function SearchBar({
   const getVariantStyles = () => {
     switch (variant) {
       case "minimal":
-        return "border-0 bg-gray-50 dark:bg-gray-800/50 focus-within:bg-white dark:focus-within:bg-gray-900 focus-within:shadow-md"
+        return "border-0 bg-muted focus-within:bg-background focus-within:shadow-md"
       case "outlined":
-        return "border-2 border-gray-200 dark:border-gray-700 focus-within:border-blue-500 dark:focus-within:border-blue-400"
+        return "border-2 border-border focus-within:border-ring"
       default:
-        return "border border-gray-300 dark:border-gray-600 focus-within:border-blue-500 dark:focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-500/20"
+        return "border border-input focus-within:border-ring focus-within:ring-1 focus-within:ring-ring/20"
     }
   }
 
@@ -55,7 +55,7 @@ export default function SearchBar({
         isFocused && "shadow-sm"
       )}>
         <SearchIcon 
-          className="absolute left-3 h-4 w-4 text-gray-400 dark:text-gray-500" 
+          className="absolute left-3 h-5 w-5 text-muted-foreground" 
           aria-hidden="true"
         />
         
@@ -68,7 +68,7 @@ export default function SearchBar({
           onBlur={() => setIsFocused(false)}
           className={cn(
             "pl-10 pr-10 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0",
-            variant === "minimal" && "text-gray-700 dark:text-gray-300"
+            variant === "minimal" && "text-foreground"
           )}
           aria-label="Search"
         />
@@ -79,7 +79,7 @@ export default function SearchBar({
             variant="ghost"
             size="sm"
             onClick={handleClear}
-            className="absolute right-1 h-7 w-7 rounded-md p-0 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+            className="absolute right-1 h-7 w-7 rounded-md p-0 text-muted-foreground hover:text-foreground"
             aria-label="Clear search"
           >
             <XIcon className="h-3 w-3" />
@@ -89,9 +89,9 @@ export default function SearchBar({
 
       {/* Optional: Show search suggestions or recent searches */}
       {isFocused && query.length > 0 && (
-        <div className="absolute top-full left-0 right-0 z-50 mt-1 max-h-60 overflow-auto rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 shadow-lg">
+        <div className="absolute top-full left-0 right-0 z-50 mt-1 max-h-60 overflow-auto rounded-md border border-border bg-popover shadow-lg">
           {/* This can be populated with search suggestions */}
-          <div className="p-2 text-sm text-gray-500 dark:text-gray-400">
+          <div className="p-2 body-text-small text-muted-foreground">
             Press Enter to search for &ldquo;{query}&rdquo;
           </div>
         </div>

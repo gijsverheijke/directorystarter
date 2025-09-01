@@ -253,7 +253,7 @@ export default function StylesheetPage() {
                 <CardDescription>Different button styles for various use cases</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-5">
                   <Button variant="default">Default</Button>
                   <Button variant="secondary">Secondary</Button>
                   <Button variant="outline">Outline</Button>
@@ -271,7 +271,7 @@ export default function StylesheetPage() {
                 <CardDescription>Various button sizes for different contexts</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex flex-wrap items-center gap-3">
+                <div className="flex flex-wrap items-center gap-5">
                   <Button size="sm">Small</Button>
                   <Button size="default">Default</Button>
                   <Button size="lg">Large</Button>
@@ -292,7 +292,7 @@ export default function StylesheetPage() {
               <CardDescription>Status indicators and labels</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-5">
                 <Badge variant="default">Default</Badge>
                 <Badge variant="secondary">Secondary</Badge>
                 <Badge variant="outline">Outline</Badge>
@@ -393,11 +393,11 @@ export default function StylesheetPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="p-4 rounded-lg border bg-muted/50">
+              <div className="p-5 rounded-lg border bg-muted/50">
                 <p className="caption mb-3">
                   Toggle your system&rsquo;s dark mode to see all components adapt automatically.
                 </p>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-5">
                   <Badge>Auto-adapting</Badge>
                   <Badge variant="outline">CSS Variables</Badge>
                   <Badge variant="secondary">System Theme</Badge>

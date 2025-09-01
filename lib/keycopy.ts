@@ -4,3 +4,5 @@
 export const title = 'Awesome Directory';
 
 export const h2 = 'This is a directory of super useful tools and resources';
+
+export const rights = `© ${new Date().getFullYear()} Directory Starter.`;
