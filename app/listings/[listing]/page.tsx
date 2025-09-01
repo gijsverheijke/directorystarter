@@ -47,7 +47,7 @@ export default function ListingPage({ params }: { params: { listing: string } })
   }
 
   return (
-    <div className="container mx-auto px-5 py-10 max-w-4xl">
+    <div className="container-spacing">
       <div className="section-spacing">
         <Breadcrumbs breadcrumbs={[
           { label: 'Home', href: '/' },
@@ -55,9 +55,10 @@ export default function ListingPage({ params }: { params: { listing: string } })
           { label: listing.title, href: `/listings/${params.listing}` }
         ]} />
       </div>
+      
       <Card className="section-spacing">
         <CardHeader className="pb-6">
-          <div className="flex items-start gap-5">
+          <div className="flex items-start small-spacing">
             <Avatar className="h-16 w-16">
               <AvatarImage src={listing.logo} alt={`${listing.title} logo`} />
               <AvatarFallback>{listing.title.slice(0, 2).toUpperCase()}</AvatarFallback>
@@ -65,7 +66,7 @@ export default function ListingPage({ params }: { params: { listing: string } })
             <div className="flex-1">
               <CardTitle className="text-3xl mb-2">{listing.title}</CardTitle>
               <p className="text-muted-foreground text-lg element-spacing">{listing.blurb}</p>
-              <div className="flex items-center gap-5">
+              <div className="flex items-center small-spacing">
                 <Badge variant="secondary" className="text-sm">
                   {listing.category}
                 </Badge>
@@ -118,14 +119,7 @@ export default function ListingPage({ params }: { params: { listing: string } })
         </CardContent>
       </Card>
 
-      <div className="text-center">
-        <a
-          href={`/categories/${listing.category.toLowerCase().replace(/\s+/g, '-')}`}
-          className="text-muted-foreground hover:text-foreground transition-colors"
-        >
-          ← Back to {listing.category} listings
-        </a>
-      </div>
+      
     </div>
   )
 }

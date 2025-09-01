@@ -28,11 +28,7 @@ export default function Home() {
         </div>
       </main>
       
-      <footer className="border-t mt-15 py-10">
-        <div className="container mx-auto px-5 text-center">
-          <p className="text-muted-foreground">This is some text in the footer</p>
-        </div>
-      </footer>
+      
     </div>
   );
 }
