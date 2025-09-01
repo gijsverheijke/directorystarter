@@ -11,6 +11,26 @@ The idea is that this is one core setup that I can clone to build several direct
 - Admin role who can edit and delete all listings
 - Full stack utilities to add, update, and delete entries
 
+## Site URL structure
+/categories/[category-title]
+/listings/[listing-title]
+/blog/
+
+
+
+
+## Data structure
+
+Listing
+- Title -> also becomes url slug and metatitle
+- Blurb -> becomes meta description
+- Description
+- URL
+- Logo
+- Category
+- Tags {JSON}
+
+
 ## Main components
 - Header
 - Footer
@@ -21,8 +41,19 @@ The idea is that this is one core setup that I can clone to build several direct
 - Subscribe newsletter button
 - Blog
 
-
-
 ## Landing page
+- Header
+- Hero
+- Search
+- Listings
+- Subscribe
+- Submit
 
+## Listing page
+- Header
+- Hero with logo and title
+- Category
+- Tags
+- Description
 
+## Blog
