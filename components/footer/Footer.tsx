@@ -1,5 +1,7 @@
 import { mockListings } from '@/lib/mock-data'
 import { rights } from '@/lib/keycopy'
+import { ThemeSwitch } from '@/components/ui/theme-switch'
+import Link from 'next/link'
 
 export default function Footer() {
   // Get unique categories and generate slugs (same logic as categories page)
@@ -22,33 +24,36 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="md:col-span-1">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground mb-4">
               {rights}
             </p>
+            <div className="">
+            <ThemeSwitch />
+            </div>
           </div>
 
           {/* Navigation Links */}
           <div className="md:col-span-1">
             <h3 className="text-sm font-semibold text-foreground mb-3">Navigation</h3>
             <div className="flex flex-col gap-2">
-              <a
+              <Link
                 href="/listings"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Browse Listings
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/tags"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Tags
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/blog"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Blog
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -57,13 +62,13 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-foreground mb-3">Categories</h3>
             <div className="grid grid-cols-2 gap-2">
               {categories.map((category) => (
-                <a
+                <Link
                   key={category.slug}
                   href={`/categories/${category.slug}`}
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {category.name}
-                </a>
+                </Link>
               ))}
             </div>
           </div>

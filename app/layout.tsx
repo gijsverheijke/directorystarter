@@ -31,10 +31,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider
+          enableSystem={true}
           attribute="class"
+          storageKey="theme"
           defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
         >
           <div className="min-h-screen flex flex-col">
             <Header />
