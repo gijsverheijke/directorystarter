@@ -127,6 +127,10 @@
     @apply container mx-auto px-5 py-10;
   }
   
+  .header-spacing {
+    @apply container mx-auto px-5 py-5;
+  }
+
   .page-spacing {
     @apply px-5 py-10;
   }

@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+# Design system
+- Only use colors and styles as defined in globals.css
+- JSX in components should be minimal and never contain anything that could have been gotten from global.css styles
+- All spacing should be 1, 2 or multiples of 5 only

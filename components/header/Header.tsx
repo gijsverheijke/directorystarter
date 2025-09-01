@@ -9,7 +9,7 @@ import {
 
 export default function Header() {
   return (
-    <div className="container-spacing">
+    <div className="header-spacing">
       <div className="flex items-center justify-between">
         <NavigationMenu>
           <NavigationMenuList>
