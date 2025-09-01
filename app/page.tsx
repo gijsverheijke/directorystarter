@@ -2,6 +2,7 @@
 import { title } from "@/lib/keycopy";
 import { h2 } from "@/lib/keycopy";
 import SearchBar from "@/components/search/SearchBar";
+import FAQ from "@/components/faq/Faq";
 
 // listings
 import { mockListings } from "@/lib/mock-data";
@@ -37,6 +38,11 @@ export default function Home() {
             />
           ))}
         </div>
+
+    {/*FAQ section*/}
+      <div className="section-spacing pt-20">
+      <FAQ />
+      </div>
       </main>
       
       
