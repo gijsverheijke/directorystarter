@@ -3,6 +3,7 @@ import ListingCard from '@/components/listings/ListingCard'
 import { Badge } from '@/components/ui/badge'
 import SearchBar from '@/components/search/SearchBar'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import ListingsError from '@/components/error/ListingsError'
 
 export const metadata = {
   title: 'All Listings - Directory Starter',
@@ -14,8 +15,13 @@ export const metadata = {
 }
 
 export default async function ListingsPage() {
-  const allListings = await getAllListings()
+  const { listings: allListings, error } = await getAllListings()
   const featuredListings = await getFeaturedListings()
+  
+  if (error) {
+    return <ListingsError message={error} />
+  }
+  
   const regularListings = allListings.filter(listing => !listing.is_featured)
 
   return (

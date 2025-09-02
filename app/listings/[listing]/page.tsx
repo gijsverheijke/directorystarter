@@ -2,13 +2,14 @@ import { getAllListings, getListingBySlug } from '@/utils/supabase/queries'
 import { notFound } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import SafeAvatar from '@/components/ui/safe-avatar'
 import { ExternalLink, Tag } from 'lucide-react'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import DatabaseError from '@/components/error/DatabaseError'
 
 // Generate static params for all listings at build time
 export async function generateStaticParams() {
-  const listings = await getAllListings()
+  const { listings } = await getAllListings()
   return listings.map((listing) => ({
     listing: listing.slug
   }))
@@ -16,7 +17,7 @@ export async function generateStaticParams() {
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: { params: { listing: string } }) {
-  const listing = await getListingBySlug(params.listing)
+  const { listing } = await getListingBySlug(params.listing)
 
   if (!listing) {
     return {
@@ -37,9 +38,13 @@ export async function generateMetadata({ params }: { params: { listing: string }
 }
 
 export default async function ListingPage({ params }: { params: { listing: string } }) {
-  const listing = await getListingBySlug(params.listing)
+  const { listing, error, notFound: isNotFound } = await getListingBySlug(params.listing)
 
-  if (!listing) {
+  if (error) {
+    return <DatabaseError message={error} />
+  }
+
+  if (isNotFound || !listing) {
     notFound()
   }
 
@@ -56,10 +61,12 @@ export default async function ListingPage({ params }: { params: { listing: strin
       <Card className="section-spacing">
         <CardHeader className="pb-6">
           <div className="flex items-start small-spacing">
-            <Avatar className="h-16 w-16">
-              <AvatarImage src={listing.logo_url || ''} alt={`${listing.title} logo`} />
-              <AvatarFallback>{listing.title.slice(0, 2).toUpperCase()}</AvatarFallback>
-            </Avatar>
+            <SafeAvatar 
+              src={listing.logo_url}
+              alt={`${listing.title} logo`}
+              fallback={listing.title.slice(0, 2).toUpperCase()}
+              className="h-16 w-16"
+            />
             <div className="flex-1">
               <CardTitle className="text-3xl mb-2">{listing.title}</CardTitle>
               <p className="text-muted-foreground text-lg element-spacing">{listing.blurb}</p>

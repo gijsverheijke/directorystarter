@@ -11,7 +11,6 @@ The idea is that this is one core setup that I can clone to build several direct
 -- Needs implementation with Resend to create the audience and send the newsletters
 -- Dependency on other stuff
 - Error handling
-- Loading states
 - Setup favicon
 - Robots.txt
 - Sitemap.xml

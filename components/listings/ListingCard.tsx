@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Card, CardContent } from "../ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
+import SafeAvatar from "../ui/safe-avatar";
 import { Badge } from "../ui/badge";
 import { Listing } from "@/types/listing";
 
@@ -27,12 +27,12 @@ export default function ListingCard({ listing }: ListingCardProps) {
       
       <CardContent className="px-5 relative">
         <div className="flex items-start gap-5">
-          <Avatar className="size-8 flex-shrink-0">
-            <AvatarImage src={listing.logo_url || ''} alt={listing.title} />
-            <AvatarFallback className="bg-primary text-primary-foreground font-medium text-xs">
-              {getAvatarFallback(listing.title)}
-            </AvatarFallback>
-          </Avatar>
+          <SafeAvatar 
+            src={listing.logo_url}
+            alt={listing.title}
+            fallback={getAvatarFallback(listing.title)}
+            className="size-8 flex-shrink-0"
+          />
           
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2 mb-1">

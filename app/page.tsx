@@ -8,10 +8,11 @@ import HeroAnimation from "@/components/hero/HeroAnimation";
 // listings
 import { getAllListings } from "@/utils/supabase/queries";
 import ListingCard from "@/components/listings/ListingCard";
+import ListingsError from "@/components/error/ListingsError";
 
 
 export default async function Home() {
-  const listings = await getAllListings();
+  const { listings, error } = await getAllListings();
     return (
     // Hero
     <div>
@@ -29,14 +30,18 @@ export default async function Home() {
       <main className="container-spacing">
         
     {/*Main content area*/}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {listings.map((listing) => (
-            <ListingCard 
-              key={listing.id} 
-              listing={listing}
-            />
-          ))}
-        </div>
+        {error ? (
+          <ListingsError message={error} />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {listings.map((listing) => (
+              <ListingCard 
+                key={listing.id} 
+                listing={listing}
+              />
+            ))}
+          </div>
+        )}
 
     {/*FAQ section*/}
       <div className="section-spacing pt-20">

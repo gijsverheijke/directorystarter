@@ -13,7 +13,7 @@ const supabase = createClient(
 
 
 // Get all approved listings
-export async function getAllListings(): Promise<Listing[]> {
+export async function getAllListings(): Promise<{ listings: Listing[], error?: string }> {
   const { data, error } = await supabase
     .from(TABLE_NAME)
     .select('*')
@@ -22,10 +22,10 @@ export async function getAllListings(): Promise<Listing[]> {
 
   if (error) {
     console.error('Error fetching listings:', error)
-    return []
+    return { listings: [], error: 'Failed to load listings. Please try again later.' }
   }
 
-  return data || []
+  return { listings: data || [] }
 }
 
 // Get featured listings
@@ -46,7 +46,7 @@ export async function getFeaturedListings(): Promise<Listing[]> {
 }
 
 // Get listing by slug
-export async function getListingBySlug(slug: string): Promise<Listing | null> {
+export async function getListingBySlug(slug: string): Promise<{ listing: Listing | null, error?: string, notFound?: boolean }> {
   const { data, error } = await supabase
     .from(TABLE_NAME)
     .select('*')
@@ -56,10 +56,16 @@ export async function getListingBySlug(slug: string): Promise<Listing | null> {
 
   if (error) {
     console.error('Error fetching listing by slug:', error)
-    return null
+    
+    // Check if it's a not found error (PGRST116) vs other database errors
+    if (error.code === 'PGRST116') {
+      return { listing: null, notFound: true }
+    }
+    
+    return { listing: null, error: 'Failed to load listing. Please try again later.' }
   }
 
-  return data
+  return { listing: data }
 }
 
 // Get listings by category
