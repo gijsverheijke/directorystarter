@@ -13,11 +13,27 @@ The idea is that this is one core setup that I can clone to build several direct
 
 ## Site URL structure
 /categories/[category-title]
+
 /listings/[listing-title]
+
+/tags/[tag]
+
 /blog/
 
+/search
 
+## Blog
+The blog runs on MDX with a very simple setup that does not require frontmatter and frontmatter related plugins. 
+- Simply create a new route for each blogpost and put a new page.mdx file inside
+- Write normal markdown in the file
+- When pushed to main, the post will be up, that simple
 
+This means that blog posts are very easy to automate now -- it only requires writing markdown files.
+
+## Key attributes and copywriting
+In the /lib folder there are faq.md and a keycopy.ts file
+- Just write markdown in the faq file, and the FAQ will be rendered in the Faq.tsx component
+- Changing the directory title and h2 in the keycopy.ts file will change that on the homepage AND ALSO in the metadata
 
 ## Data structure
 
@@ -92,6 +108,3 @@ Simple, predictable behavior for users and developers
 - Tags
 - Description
 
-
-
-## Blog
