@@ -3,11 +3,15 @@ The idea is that this is one core setup that I can clone to build several direct
 
 ## TODO
 - Submit button and workflow (best to handle it without requiring user auth, need some thinking)
+
 -- How to do it without auth? 
 -- Implementing auth would allow users to edit listings as well, but it won't be needed at first)
 - Newsletter subscribe button (can def launch without it)
+
 -- Needs implementation with Resend to create the audience and send the newsletters
 -- Dependency on other stuff
+- Error handling
+- Loading states
 - Setup favicon
 - Robots.txt
 - Sitemap.xml
