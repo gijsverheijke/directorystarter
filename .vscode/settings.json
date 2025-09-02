@@ -1,0 +1,12 @@
+{
+  "files.associations": {
+    "*.mdx": "mdx"
+  },
+  "[mdx]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.wordWrap": "on"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}
