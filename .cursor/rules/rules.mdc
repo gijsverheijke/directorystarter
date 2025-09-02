@@ -5,3 +5,14 @@ alwaysApply: true
 - Only use colors and styles as defined in globals.css
 - JSX in components should be minimal and never contain anything that could have been gotten from global.css styles
 - All spacing should be 1, 2 or multiples of 5 only
+
+# Data and rendering
+- SEO is critical for this project, so everything must be rendered from the server as much as possible
+
+# Development principles
+- Be a DRY maximalist. If something is repeated more than twice, extract it into a function
+- Always implement the simplest solution to any problem, KISS, YAGNI
+- You can just ask things. Shadcn has more components than are installed. There are Motion Primitives that we can install. The user has the ability to answer complex questions about trade-offs and to find current information on how to implement things. 
+
+# Your may not know
+- Supabase now works with 'publishable' and 'secret' keys, not ANON and Service Role
