@@ -16,10 +16,10 @@ export default function Faq({ faqs }: FaqProps) {
         <p className="text-muted-foreground">Find answers to common questions about our directory</p>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-6">
         {faqItems.map((faq, index) => (
-          <div key={index} className="border border-border rounded-lg p-5">
-            <h3 className="text-xl font-semibold mb-2">{faq.question}</h3>
+          <div key={index} className="space-y-3">
+            <h3 className="text-lg font-semibold text-foreground">{faq.question}</h3>
             <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
               {faq.answer}
             </div>
