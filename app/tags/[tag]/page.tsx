@@ -1,14 +1,14 @@
-import { mockListings } from '@/lib/mock-data'
+import { getAllListings, getTags } from '@/utils/supabase/queries'
 import { notFound } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
 import ListingCard from '@/components/listings/ListingCard'
 import { Tag } from 'lucide-react'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import Link from 'next/link'
 
 // Generate static params for all tags at build time
 export async function generateStaticParams() {
-  const allTags = mockListings.flatMap(listing => listing.tags)
-  const uniqueTags = [...new Set(allTags)]
+  const uniqueTags = await getTags()
   
   return uniqueTags.map((tag) => ({
     tag: tag.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
@@ -20,8 +20,9 @@ export async function generateMetadata({ params }: { params: { tag: string } }) 
   const tagSlug = params.tag
   const tagName = tagSlug.replace(/-/g, ' ')
   
-  const listingsWithTag = mockListings.filter(
-    listing => listing.tags.some(tag => 
+  const allListings = await getAllListings()
+  const listingsWithTag = allListings.filter(
+    listing => (listing.tags || []).some(tag => 
       tag.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === tagSlug
     )
   )
@@ -43,12 +44,13 @@ export async function generateMetadata({ params }: { params: { tag: string } }) 
   }
 }
 
-export default function TagPage({ params }: { params: { tag: string } }) {
+export default async function TagPage({ params }: { params: { tag: string } }) {
   const tagSlug = params.tag
   const tagName = tagSlug.replace(/-/g, ' ')
   
-  const listingsWithTag = mockListings.filter(
-    listing => listing.tags.some(tag => 
+  const allListings = await getAllListings()
+  const listingsWithTag = allListings.filter(
+    listing => (listing.tags || []).some(tag => 
       tag.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === tagSlug
     )
   )
@@ -83,17 +85,17 @@ export default function TagPage({ params }: { params: { tag: string } }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {listingsWithTag.map((listing) => (
-          <ListingCard key={listing.title} listing={listing} />
+          <ListingCard key={listing.id} listing={listing} />
         ))}
       </div>
 
       <div className="mt-15 text-center">
-        <a
+        <Link
           href="/tags"
           className="text-muted-foreground hover:text-foreground transition-colors"
         >
           ← Browse all tags
-        </a>
+        </Link>
       </div>
     </div>
   )

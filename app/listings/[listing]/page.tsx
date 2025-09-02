@@ -1,4 +1,4 @@
-import { mockListings } from '@/lib/mock-data'
+import { getAllListings, getListingBySlug } from '@/utils/supabase/queries'
 import { notFound } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -8,16 +8,15 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 
 // Generate static params for all listings at build time
 export async function generateStaticParams() {
-  return mockListings.map((listing) => ({
-    listing: listing.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+  const listings = await getAllListings()
+  return listings.map((listing) => ({
+    listing: listing.slug
   }))
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: { params: { listing: string } }) {
-  const listing = mockListings.find(
-    (l) => l.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === params.listing
-  )
+  const listing = await getListingBySlug(params.listing)
 
   if (!listing) {
     return {
@@ -32,15 +31,13 @@ export async function generateMetadata({ params }: { params: { listing: string }
     openGraph: {
       title: listing.title,
       description: listing.blurb,
-      images: [listing.logo],
+      images: listing.logo_url ? [listing.logo_url] : [],
     },
   }
 }
 
-export default function ListingPage({ params }: { params: { listing: string } }) {
-  const listing = mockListings.find(
-    (l) => l.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === params.listing
-  )
+export default async function ListingPage({ params }: { params: { listing: string } }) {
+  const listing = await getListingBySlug(params.listing)
 
   if (!listing) {
     notFound()
@@ -60,7 +57,7 @@ export default function ListingPage({ params }: { params: { listing: string } })
         <CardHeader className="pb-6">
           <div className="flex items-start small-spacing">
             <Avatar className="h-16 w-16">
-              <AvatarImage src={listing.logo} alt={`${listing.title} logo`} />
+              <AvatarImage src={listing.logo_url || ''} alt={`${listing.title} logo`} />
               <AvatarFallback>{listing.title.slice(0, 2).toUpperCase()}</AvatarFallback>
             </Avatar>
             <div className="flex-1">
@@ -70,7 +67,7 @@ export default function ListingPage({ params }: { params: { listing: string } })
                 <Badge variant="secondary" className="text-sm">
                   {listing.category}
                 </Badge>
-                {listing.isFeatured && (
+                {listing.is_featured && (
                   <Badge className="text-sm">Featured</Badge>
                 )}
               </div>
@@ -106,7 +103,7 @@ export default function ListingPage({ params }: { params: { listing: string } })
 
             <div className="pt-4">
               <a
-                href={listing.externalUrl}
+                href={listing.external_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-5 rounded-md hover:bg-primary/90 transition-colors font-medium"

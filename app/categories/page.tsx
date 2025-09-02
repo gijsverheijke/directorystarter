@@ -1,4 +1,4 @@
-import { mockListings } from '@/lib/mock-data'
+import { getAllListings } from '@/utils/supabase/queries'
 import BrowseBadge from '@/components/ui/browse-badge'
 import Breadcrumbs from '@/components/Breadcrumbs'
 
@@ -11,9 +11,11 @@ export const metadata = {
   },
 }
 
-export default function CategoriesPage() {
+export default async function CategoriesPage() {
+  const listings = await getAllListings()
+  
   // Get unique categories with counts
-  const categoryData = mockListings.reduce((acc, listing) => {
+  const categoryData = listings.reduce((acc, listing) => {
     const category = listing.category
     if (!acc[category]) {
       acc[category] = {
@@ -24,7 +26,7 @@ export default function CategoriesPage() {
       }
     }
     acc[category].count++
-    if (listing.isFeatured) {
+    if (listing.is_featured) {
       acc[category].featuredCount++
     }
     return acc

@@ -6,11 +6,12 @@ import FAQ from "@/components/faq/Faq";
 import HeroAnimation from "@/components/hero/HeroAnimation";
 
 // listings
-import { mockListings } from "@/lib/mock-data";
+import { getAllListings } from "@/utils/supabase/queries";
 import ListingCard from "@/components/listings/ListingCard";
 
 
-export default function Home() {
+export default async function Home() {
+  const listings = await getAllListings();
     return (
     // Hero
     <div>
@@ -29,9 +30,9 @@ export default function Home() {
         
     {/*Main content area*/}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {mockListings.map((listing, index) => (
+          {listings.map((listing) => (
             <ListingCard 
-              key={index} 
+              key={listing.id} 
               listing={listing}
             />
           ))}

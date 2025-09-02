@@ -1,4 +1,4 @@
-import { mockListings } from '@/lib/mock-data'
+import { getAllListings, getFeaturedListings } from '@/utils/supabase/queries'
 import ListingCard from '@/components/listings/ListingCard'
 import { Badge } from '@/components/ui/badge'
 import SearchBar from '@/components/search/SearchBar'
@@ -13,9 +13,10 @@ export const metadata = {
   },
 }
 
-export default function ListingsPage() {
-  const featuredListings = mockListings.filter(listing => listing.isFeatured)
-  const regularListings = mockListings.filter(listing => !listing.isFeatured)
+export default async function ListingsPage() {
+  const allListings = await getAllListings()
+  const featuredListings = await getFeaturedListings()
+  const regularListings = allListings.filter(listing => !listing.is_featured)
 
   return (
     <div className="container-spacing">
@@ -30,11 +31,11 @@ export default function ListingsPage() {
           <div>
             <h1 className="text-4xl font-bold mb-2">All Listings</h1>
             <p className="text-muted-foreground text-lg">
-              Discover {mockListings.length} amazing tools and services in our directory.
+              Discover {allListings.length} amazing tools and services in our directory.
             </p>
           </div>
           <Badge variant="secondary" className="text-lg px-5 py-2">
-            {mockListings.length} listings
+            {allListings.length} listings
           </Badge>
         </div>
         
@@ -53,7 +54,7 @@ export default function ListingsPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {featuredListings.map((listing) => (
-              <ListingCard key={listing.title} listing={listing} />
+              <ListingCard key={listing.id} listing={listing} />
             ))}
           </div>
         </div>
@@ -64,7 +65,7 @@ export default function ListingsPage() {
           <h2 className="text-2xl font-semibold section-spacing">All Listings</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {regularListings.map((listing) => (
-              <ListingCard key={listing.title} listing={listing} />
+              <ListingCard key={listing.id} listing={listing} />
             ))}
           </div>
         </div>

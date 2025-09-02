@@ -1,12 +1,13 @@
-import { mockListings } from '@/lib/mock-data'
+import { getAllListings, getCategories } from '@/utils/supabase/queries'
 import { notFound } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
 import ListingCard from '@/components/listings/ListingCard'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import Link from 'next/link'
 
 // Generate static params for all categories at build time
 export async function generateStaticParams() {
-  const categories = [...new Set(mockListings.map(listing => listing.category))]
+  const categories = await getCategories()
   
   return categories.map((category) => ({
     category: category.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
@@ -18,7 +19,9 @@ export async function generateMetadata({ params }: { params: { category: string 
   const categorySlug = params.category
   const categoryName = categorySlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
   
-  const listingsInCategory = mockListings.filter(
+  // Find the actual category by matching the slug
+  const allListings = await getAllListings()
+  const listingsInCategory = allListings.filter(
     listing => listing.category.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === categorySlug
   )
 
@@ -39,11 +42,13 @@ export async function generateMetadata({ params }: { params: { category: string 
   }
 }
 
-export default function CategoryPage({ params }: { params: { category: string } }) {
+export default async function CategoryPage({ params }: { params: { category: string } }) {
   const categorySlug = params.category
   const categoryName = categorySlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
   
-  const listingsInCategory = mockListings.filter(
+  // Find the actual category by matching the slug
+  const allListings = await getAllListings()
+  const listingsInCategory = allListings.filter(
     listing => listing.category.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === categorySlug
   )
 
@@ -74,17 +79,17 @@ export default function CategoryPage({ params }: { params: { category: string } 
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {listingsInCategory.map((listing) => (
-          <ListingCard key={listing.title} listing={listing} />
+          <ListingCard key={listing.id} listing={listing} />
         ))}
       </div>
 
       <div className="mt-15 text-center">
-        <a
+        <Link
           href="/categories"
           className="text-muted-foreground hover:text-foreground transition-colors"
         >
           ← Browse all categories
-        </a>
+        </Link>
       </div>
     </div>
   )

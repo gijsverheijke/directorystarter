@@ -1,4 +1,4 @@
-import { mockListings } from '@/lib/mock-data'
+import { getAllListings } from '@/utils/supabase/queries'
 import BrowseBadge from '@/components/ui/browse-badge'
 import Breadcrumbs from '@/components/Breadcrumbs'
 
@@ -11,10 +11,12 @@ export const metadata = {
   },
 }
 
-export default function TagsPage() {
+export default async function TagsPage() {
+  const listings = await getAllListings()
+  
   // Get unique tags with counts
-  const tagData = mockListings.reduce((acc, listing) => {
-    listing.tags.forEach(tag => {
+  const tagData = listings.reduce((acc, listing) => {
+    (listing.tags || []).forEach(tag => {
       const slug = tag.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
       if (!acc[tag]) {
         acc[tag] = {
@@ -25,7 +27,7 @@ export default function TagsPage() {
         }
       }
       acc[tag].count++
-      if (listing.isFeatured) {
+      if (listing.is_featured) {
         acc[tag].featuredCount++
       }
     })

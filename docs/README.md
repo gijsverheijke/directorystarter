@@ -22,14 +22,50 @@ The idea is that this is one core setup that I can clone to build several direct
 ## Data structure
 
 Listing
-- Title -> also becomes url slug and metatitle
-- Blurb -> becomes meta description
-- Description
-- URL
-- Logo
-- Category
-- Tags {JSON}
+- id
+- created_at
+- updated_at
+- title -> also becomes url slug and metatitle
+- blurb -> becomes meta description
+- slug
+- description
+- external_url
+- logo_url
+- category
+- tags {JSON}
+- status
+- is_featured
 
+### Slug Implementation Plan
+
+Approach: Separate slug column in the database
+
+#### Key Implementation Details:
+
+**Slug Generation**
+Auto-generate slug from product title during creation
+Store in dedicated slug column (independent from title column)
+Slug remains unchanged when title is updated
+
+**User Experience**
+Display real-time slug preview during product creation
+Show full URL format: yoursite.com/products/{slug}
+This allows users to catch and correct typos before submission
+
+**Edit Permissions**
+Slug is immutable after creation for regular users
+Only admins can modify slugs post-creation (for critical fixes)
+
+#### Rationale:
+Maintains URL stability when titles are updated
+Prevents broken links and SEO issues
+Minimal complexity while providing flexibility for edge cases
+Visual preview reduces typo-related issues at source
+
+#### Technical Benefits:
+Clean separation of display (title) and URL (slug) concerns
+No complex time-based rules or redirect management needed
+Simple, predictable behavior for users and developers
 
 ## Main components
 - Header
@@ -55,5 +91,7 @@ Listing
 - Category
 - Tags
 - Description
+
+
 
 ## Blog

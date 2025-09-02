@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { SearchIcon, XIcon } from "lucide-react"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { cn } from "@/lib/utils"
+import { useRouter, useSearchParams } from "next/navigation"
 
 interface SearchBarProps {
   placeholder?: string
@@ -19,13 +20,28 @@ export default function SearchBar({
   className,
   variant = "default"
 }: SearchBarProps) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [query, setQuery] = useState("")
   const [isFocused, setIsFocused] = useState(false)
 
+  // Initialize query from URL params if on search page
+  useEffect(() => {
+    const urlQuery = searchParams.get('q')
+    if (urlQuery && window.location.pathname === '/search') {
+      setQuery(urlQuery)
+    }
+  }, [searchParams])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (query.trim() && onSearch) {
-      onSearch(query.trim())
+    if (query.trim()) {
+      if (onSearch) {
+        onSearch(query.trim())
+      } else {
+        // Navigate to search page with query
+        router.push(`/search?q=${encodeURIComponent(query.trim())}`)
+      }
     }
   }
 
@@ -33,6 +49,8 @@ export default function SearchBar({
     setQuery("")
     if (onSearch) {
       onSearch("")
+    } else if (window.location.pathname === '/search') {
+      router.push('/search')
     }
   }
 

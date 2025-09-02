@@ -1,22 +1,17 @@
-import { mockListings } from '@/lib/mock-data'
+import { getCategories } from '@/utils/supabase/queries'
 import { rights } from '@/lib/keycopy'
 import { ThemeSwitch } from '@/components/ui/theme-switch'
 import Link from 'next/link'
 
-export default function Footer() {
-  // Get unique categories and generate slugs (same logic as categories page)
-  const categoryData = mockListings.reduce((acc, listing) => {
-    const category = listing.category
-    if (!acc[category]) {
-      acc[category] = {
-        name: category,
-        slug: category.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-      }
-    }
-    return acc
-  }, {} as Record<string, { name: string; slug: string }>)
-
-  const categories = Object.values(categoryData).sort((a, b) => a.name.localeCompare(b.name))
+export default async function Footer() {
+  // Get unique categories from the database
+  const categoryNames = await getCategories()
+  
+  // Generate category data with slugs
+  const categories = categoryNames.map(category => ({
+    name: category,
+    slug: category.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+  })).sort((a, b) => a.name.localeCompare(b.name))
 
   return (
     <footer className="border-t bg-muted/50">

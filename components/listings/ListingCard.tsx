@@ -13,7 +13,7 @@ export default function ListingCard({ listing }: ListingCardProps) {
     return title.charAt(0).toUpperCase();
   };
 
-  const listingSlug = listing.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+  const listingSlug = listing.slug
 
   return (
     <Card className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/20 group relative overflow-hidden">
@@ -28,7 +28,7 @@ export default function ListingCard({ listing }: ListingCardProps) {
       <CardContent className="px-5 relative">
         <div className="flex items-start gap-5">
           <Avatar className="size-8 flex-shrink-0">
-            <AvatarImage src={listing.logo} alt={listing.title} />
+            <AvatarImage src={listing.logo_url || ''} alt={listing.title} />
             <AvatarFallback className="bg-primary text-primary-foreground font-medium text-xs">
               {getAvatarFallback(listing.title)}
             </AvatarFallback>
@@ -39,7 +39,7 @@ export default function ListingCard({ listing }: ListingCardProps) {
               <h3 className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors duration-200">
                 {listing.title}
               </h3>
-              {listing.isFeatured && (
+              {listing.is_featured && (
                 <Badge variant="secondary" className="text-[10px] px-1.5 py-0.5 mb-1 flex-shrink-0">
                   Featured
                 </Badge>
