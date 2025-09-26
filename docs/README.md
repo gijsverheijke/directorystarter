@@ -4,8 +4,14 @@ The idea is that this is one core setup that I can clone to build several direct
 ## TODO
 - Submit button and workflow (best to handle it without requiring user auth, need some thinking)
 
--- How to do it without auth? 
--- Implementing auth would allow users to edit listings as well, but it won't be needed at first
+Submit button and auth flow is done. Beautiful simple flow with magiclinks only
+
+- Submit page
+
+- Dashboard page
+
+- editing via /submit/[slug]
+
 - Newsletter subscribe button (can def launch without it)
 
 -- Needs implementation with Resend to create the audience and send the newsletters
