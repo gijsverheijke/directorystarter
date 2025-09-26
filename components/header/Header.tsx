@@ -1,6 +1,7 @@
 import React from "react";
 import { MenuIcon } from "lucide-react";
 import SubmitButton from "../action-buttons/SubmitButton";
+import UserNav from "./UserNav";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -58,7 +59,10 @@ export default function Header() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <SubmitButton />
+        <div className="flex items-center gap-2">
+          <SubmitButton />
+          <UserNav />
+        </div>
       </div>
     </div>
   );

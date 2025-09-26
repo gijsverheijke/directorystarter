@@ -6,9 +6,9 @@ The idea is that this is one core setup that I can clone to build several direct
 
 Submit button and auth flow is done. Beautiful simple flow with magiclinks only
 
-- Submit page
+- Submit page | DONE
 
-- Dashboard page
+- Dashboard page | DONE
 
 - editing via /submit/[slug]
 

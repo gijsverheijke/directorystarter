@@ -76,3 +76,111 @@ export async function createListing(formData: FormData) {
   }
   return redirect('/?submitted=1')
 }
+
+export async function getUserListings(userId: string): Promise<Listing[]> {
+  const supabase = await createServerClient()
+  const { data, error } = await supabase
+    .from(TABLE_NAME)
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Error fetching user listings:', error)
+    return []
+  }
+
+  return data || []
+}
+
+export async function updateListing(listingId: string, formData: FormData) {
+  const title = String(formData.get('title') || '').trim()
+  const blurb = String(formData.get('blurb') || '').trim()
+  const description = String(formData.get('description') || '').trim()
+  const external_url = String(formData.get('external_url') || '').trim()
+  const logo_url = String(formData.get('logo_url') || '').trim()
+  const category = String(formData.get('category') || '').trim()
+  const tagsInput = String(formData.get('tags') || '')
+
+  if (!title || !blurb || !description || !external_url || !category) {
+    return redirect('/dashboard?error=missing_required')
+  }
+  if (!isValidUrl(external_url) || (logo_url && !isValidUrl(logo_url))) {
+    return redirect('/dashboard?error=invalid_url')
+  }
+
+  const tags = normalizeTags(tagsInput)
+  const supabase = await createServerClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (!user) {
+    return redirect('/login')
+  }
+
+  // First verify the user owns this listing
+  const { data: existingListing } = await supabase
+    .from(TABLE_NAME)
+    .select('user_id, slug')
+    .eq('id', listingId)
+    .single()
+
+  if (!existingListing || existingListing.user_id !== user.id) {
+    return redirect('/dashboard?error=unauthorized')
+  }
+
+  // Generate new slug only if title changed
+  const baseSlug = generateSlug(title)
+  let slug = existingListing.slug
+  
+  // Check if we need a new slug (title changed)
+  if (generateSlug(title) !== existingListing.slug) {
+    slug = await ensureUniqueSlug(baseSlug)
+  }
+
+  const updates: Partial<Listing> = {
+    title,
+    blurb,
+    slug,
+    description,
+    external_url,
+    logo_url,
+    category,
+    tags,
+    status: 'pending' // Reset to pending when edited
+  }
+
+  const { error } = await supabase
+    .from(TABLE_NAME)
+    .update(updates)
+    .eq('id', listingId)
+    .eq('user_id', user.id) // Double-check ownership
+
+  if (error) {
+    console.error('Error updating listing:', error)
+    return redirect('/dashboard?error=update_failed')
+  }
+  
+  return redirect('/dashboard?updated=1')
+}
+
+export async function deleteListing(listingId: string) {
+  const supabase = await createServerClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (!user) {
+    return redirect('/login')
+  }
+
+  const { error } = await supabase
+    .from(TABLE_NAME)
+    .delete()
+    .eq('id', listingId)
+    .eq('user_id', user.id) // Ensure user can only delete their own listings
+
+  if (error) {
+    console.error('Error deleting listing:', error)
+    return redirect('/dashboard?error=delete_failed')
+  }
+  
+  return redirect('/dashboard?deleted=1')
+}
