@@ -1,6 +1,4 @@
 'use server'
-
-import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { createClient } from '@/utils/supabase/server'
@@ -28,6 +26,7 @@ export async function signInWithMagicLink(formData: FormData) {
     redirect('/error')
   }
 
-  // Don't redirect here - user needs to check their email
-  revalidatePath('/', 'layout')
+  // Redirect back to login with success feedback (server-rendered)
+  const params = new URLSearchParams({ sent: '1', email })
+  redirect(`/login?${params.toString()}`)
 }
