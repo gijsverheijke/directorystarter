@@ -1,5 +1,5 @@
 import { signInWithMagicLink } from './actions'
-import { LoadingButton } from '@/components/LoadingButton'
+import { LoadingButton } from '@/components/ui/LoadingButton'
 
 type LoginPageProps = {
   searchParams?: { [key: string]: string | string[] | undefined }

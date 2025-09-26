@@ -11,8 +11,14 @@ import ListingCard from "@/components/listings/ListingCard";
 import ListingsError from "@/components/error/ListingsError";
 
 
-export default async function Home() {
+export default async function Home({
+  searchParams
+}: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
   const { listings, error } = await getAllListings();
+  const sp = searchParams ? await searchParams : undefined
+  const submitted = sp?.submitted === '1'
     return (
     // Hero
     <div>
@@ -28,6 +34,12 @@ export default async function Home() {
         </div>
       </section>
       <main className="container-spacing">
+        
+        {submitted && (
+          <div className="bg-secondary text-secondary-foreground border rounded-md px-5 py-2 mb-10">
+            Thanks! Your listing was submitted and is pending review.
+          </div>
+        )}
         
     {/*Main content area*/}
         {error ? (

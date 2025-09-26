@@ -1,72 +1,93 @@
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { SubmitForm } from '@/components/submit/SubmitForm'
+import { Textarea } from '@/components/ui/textarea'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { getCategories } from '@/utils/supabase/queries'
 import { createListing } from '@/utils/supabase/actions'
+import { CategorySelect } from '@/components/submit/CategorySelect'
 
-export default async function SubmitPage({ 
-  searchParams 
-}: { 
-  searchParams?: { [key: string]: string | string[] | undefined } 
+export default async function SubmitPage({
+  searchParams
+}: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const categories = await getCategories()
-  const error = typeof searchParams?.error === 'string' ? searchParams?.error : undefined
-  const success = typeof searchParams?.success === 'string' ? searchParams?.success : undefined
+  const sp = searchParams ? await searchParams : undefined
+  const error = typeof sp?.error === 'string' ? sp.error : undefined
+  const success = typeof sp?.success === 'string' ? sp.success : undefined
 
   return (
-    <div className="max-w-3xl mx-auto space-y-5">
-      <h1 className="text-2xl font-semibold">Submit</h1>
+    <div className="max-w-3xl mx-auto page-spacing space-y-5">
+      <Card className="px-5 py-10">
+        <CardHeader className="px-5">
+          <CardTitle className="heading-2">Submit</CardTitle>
+          <CardDescription>Share your resource with the community.</CardDescription>
+        </CardHeader>
+        <SubmitForm action={createListing} className="space-y-5">
+          <CardContent className="px-5 space-y-5">
+            {error && (
+              <div className="bg-destructive/10 text-destructive border border-destructive/40 rounded-md px-5 py-2">
+                There was a problem: {error}
+              </div>
+            )}
+            {success && (
+              <div className="bg-secondary text-secondary-foreground border rounded-md px-5 py-2">
+                Thanks! Your listing was submitted.
+              </div>
+            )}
 
-      {error && <div className="text-destructive">There was a problem: {error}</div>}
-      {success && <div className="text-green-600">Thanks! Your listing was submitted.</div>}
+            <div className="space-y-2">
+              <label className="label" htmlFor="title">Title</label>
+              <Input id="title" name="title" required />
+            </div>
 
-      <form action={createListing} className="space-y-5">
-        <div className="space-y-2">
-          <label htmlFor="title">Title</label>
-          <Input id="title" name="title" required />
-        </div>
+            <div className="space-y-2">
+              <label className="label" htmlFor="blurb">Blurb</label>
+              <Textarea
+                id="blurb"
+                name="blurb"
+                rows={3}
+                required
+                placeholder="One-liner that sells your resource. Aim for 20–160 characters."
+              />
+              <p className="caption">Short summary used in listings. Keep it concise.</p>
+            </div>
 
-        <div className="space-y-2">
-          <label htmlFor="blurb">Blurb</label>
-          <textarea id="blurb" name="blurb" required className="w-full rounded-md border px-5 py-2" rows={3} />
-        </div>
+            <div className="space-y-2">
+              <label className="label" htmlFor="description">Description</label>
+              <Textarea
+                id="description"
+                name="description"
+                rows={6}
+                required
+                placeholder="What is it, who is it for, and why is it great? Include key features, pricing (if any), and any unique angles. 3–8 sentences recommended."
+              />
+              <p className="caption">Provide enough detail for evaluation; avoid marketing fluff.</p>
+            </div>
 
-        <div className="space-y-2">
-          <label htmlFor="description">Description</label>
-          <textarea id="description" name="description" required className="w-full rounded-md border px-5 py-2" rows={6} />
-        </div>
+            <div className="space-y-2">
+              <label className="label" htmlFor="external_url">Website</label>
+              <Input id="external_url" name="external_url" type="url" required />
+            </div>
 
-        <div className="space-y-2">
-          <label htmlFor="external_url">Website</label>
-          <Input id="external_url" name="external_url" type="url" required />
-        </div>
+            <div className="space-y-2">
+              <label className="label" htmlFor="logo_url">Logo URL</label>
+              <Input id="logo_url" name="logo_url" type="url" />
+            </div>
 
-        <div className="space-y-2">
-          <label htmlFor="logo_url">Logo URL</label>
-          <Input id="logo_url" name="logo_url" type="url" />
-        </div>
+            <div className="space-y-2">
+              <label className="label">Category</label>
+              <CategorySelect name="category" options={categories} required />
+            </div>
 
-        <div className="space-y-2">
-          <label>Category</label>
-          <Select name="category" required>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map((c) => (
-                <SelectItem key={c} value={c}>{c}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="tags">Tags (comma-separated)</label>
-          <Input id="tags" name="tags" placeholder="tag1, tag2, tag3" />
-        </div>
-
-        <Button type="submit">Submit listing</Button>
-      </form>
+            <div className="space-y-2">
+              <label className="label" htmlFor="tags">Tags (comma-separated)</label>
+              <Input id="tags" name="tags" placeholder="tag1, tag2, tag3" />
+            </div>
+          </CardContent>
+          <CardFooter className="px-5" />
+        </SubmitForm>
+      </Card>
     </div>
   )
 }

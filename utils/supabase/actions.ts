@@ -74,5 +74,5 @@ export async function createListing(formData: FormData) {
     console.error('Error submitting listing:', error)
     return redirect('/submit?error=insert_failed')
   }
-  return redirect('/submit?success=1')
+  return redirect('/?submitted=1')
 }
