@@ -16,8 +16,9 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: { listing: string } }) {
-  const { listing } = await getListingBySlug(params.listing)
+export async function generateMetadata({ params }: { params: Promise<{ listing: string }> }) {
+  const { listing: slug } = await params
+  const { listing } = await getListingBySlug(slug)
 
   if (!listing) {
     return {
@@ -37,8 +38,9 @@ export async function generateMetadata({ params }: { params: { listing: string }
   }
 }
 
-export default async function ListingPage({ params }: { params: { listing: string } }) {
-  const { listing, error, notFound: isNotFound } = await getListingBySlug(params.listing)
+export default async function ListingPage({ params }: { params: Promise<{ listing: string }> }) {
+  const { listing: slug } = await params
+  const { listing, error, notFound: isNotFound } = await getListingBySlug(slug)
 
   if (error) {
     return <DatabaseError message={error} />
@@ -54,7 +56,7 @@ export default async function ListingPage({ params }: { params: { listing: strin
         <Breadcrumbs breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'All Listings', href: '/listings' },
-          { label: listing.title, href: `/listings/${params.listing}` }
+          { label: listing.title, href: `/listings/${slug}` }
         ]} />
       </div>
       

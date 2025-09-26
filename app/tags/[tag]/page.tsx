@@ -16,8 +16,9 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: { tag: string } }) {
-  const tagSlug = params.tag
+export async function generateMetadata({ params }: { params: Promise<{ tag: string }> }) {
+  const { tag } = await params
+  const tagSlug = tag
   const tagName = tagSlug.replace(/-/g, ' ')
   
   const allListings = await getAllListings()
@@ -44,8 +45,9 @@ export async function generateMetadata({ params }: { params: { tag: string } }) 
   }
 }
 
-export default async function TagPage({ params }: { params: { tag: string } }) {
-  const tagSlug = params.tag
+export default async function TagPage({ params }: { params: Promise<{ tag: string }> }) {
+  const { tag } = await params
+  const tagSlug = tag
   const tagName = tagSlug.replace(/-/g, ' ')
   
   const allListings = await getAllListings()

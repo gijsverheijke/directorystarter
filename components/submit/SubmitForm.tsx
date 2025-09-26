@@ -7,9 +7,10 @@ import { LoadingButton } from '@/components/ui/LoadingButton'
 type SubmitFormProps = React.PropsWithChildren<{
   action: (formData: FormData) => void
   className?: string
+  buttonText?: string
 }>
 
-export function SubmitForm({ action, className, children }: SubmitFormProps) {
+export function SubmitForm({ action, className, children, buttonText = 'Submit listing' }: SubmitFormProps) {
   const [isValid, setIsValid] = React.useState(false)
   const formRef = React.useRef<HTMLFormElement | null>(null)
 
@@ -38,7 +39,7 @@ export function SubmitForm({ action, className, children }: SubmitFormProps) {
     <form ref={formRef} action={action} className={className} onChange={handleChange} onInput={handleChange} noValidate>
       {children}
       <div className="mt-5">
-        <LoadingButton disabled={!isValid || pending}>Submit listing</LoadingButton>
+        <LoadingButton disabled={!isValid || pending}>{buttonText}</LoadingButton>
       </div>
     </form>
   )

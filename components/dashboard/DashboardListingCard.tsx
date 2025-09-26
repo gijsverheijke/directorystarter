@@ -4,7 +4,6 @@ import SafeAvatar from "../ui/safe-avatar"
 import { Badge } from "../ui/badge"
 import { Button } from "../ui/button"
 import { Listing } from "@/types/listing"
-import EditListingForm from "@/components/dashboard/EditListingForm"
 import DeleteListingButton from "@/components/dashboard/DeleteListingButton"
 
 interface DashboardListingCardProps {
@@ -74,7 +73,11 @@ export default function DashboardListingCard({ listing }: DashboardListingCardPr
             </Link>
           )}
           
-          <EditListingForm listing={listing} />
+          <Link href={`/submit/${listing.id}`}>
+            <Button variant="outline" size="sm">
+              Edit
+            </Button>
+          </Link>
           <DeleteListingButton listingId={listing.id!} listingTitle={listing.title} />
         </div>
       </CardContent>

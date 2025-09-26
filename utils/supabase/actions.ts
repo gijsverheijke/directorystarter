@@ -94,6 +94,9 @@ export async function getUserListings(userId: string): Promise<Listing[]> {
 }
 
 export async function updateListing(listingId: string, formData: FormData) {
+  console.log('=== UPDATE LISTING START ===')
+  console.log('Listing ID:', listingId)
+  
   const title = String(formData.get('title') || '').trim()
   const blurb = String(formData.get('blurb') || '').trim()
   const description = String(formData.get('description') || '').trim()
@@ -102,29 +105,44 @@ export async function updateListing(listingId: string, formData: FormData) {
   const category = String(formData.get('category') || '').trim()
   const tagsInput = String(formData.get('tags') || '')
 
+  console.log('Form data:', { title, blurb, category, external_url })
+
   if (!title || !blurb || !description || !external_url || !category) {
+    console.log('Missing required fields')
     return redirect('/dashboard?error=missing_required')
   }
   if (!isValidUrl(external_url) || (logo_url && !isValidUrl(logo_url))) {
+    console.log('Invalid URL')
     return redirect('/dashboard?error=invalid_url')
   }
 
   const tags = normalizeTags(tagsInput)
   const supabase = await createServerClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  
+  console.log('User:', user?.id, 'User error:', userError)
   
   if (!user) {
+    console.log('No user found, redirecting to login')
     return redirect('/login')
   }
 
   // First verify the user owns this listing
-  const { data: existingListing } = await supabase
+  console.log('Checking ownership for listing:', listingId, 'user:', user.id)
+  const { data: existingListing, error: fetchError } = await supabase
     .from(TABLE_NAME)
     .select('user_id, slug')
     .eq('id', listingId)
     .single()
 
+  console.log('Existing listing:', existingListing, 'Fetch error:', fetchError)
+
   if (!existingListing || existingListing.user_id !== user.id) {
+    console.log('Ownership check failed:', { 
+      listingExists: !!existingListing,
+      listingUserId: existingListing?.user_id,
+      currentUserId: user.id 
+    })
     return redirect('/dashboard?error=unauthorized')
   }
 
@@ -149,17 +167,30 @@ export async function updateListing(listingId: string, formData: FormData) {
     status: 'pending' // Reset to pending when edited
   }
 
-  const { error } = await supabase
+  console.log('Attempting to update with:', updates)
+  console.log('Update conditions: listingId =', listingId, 'user.id =', user.id)
+  console.log('TABLE_NAME:', TABLE_NAME)
+  
+  const { error, data } = await supabase
     .from(TABLE_NAME)
     .update(updates)
     .eq('id', listingId)
     .eq('user_id', user.id) // Double-check ownership
 
+  console.log('Update result:', { error, data })
+
   if (error) {
     console.error('Error updating listing:', error)
+    console.error('Error details:', {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint
+    })
     return redirect('/dashboard?error=update_failed')
   }
   
+  console.log('Update successful, redirecting to dashboard')
   return redirect('/dashboard?updated=1')
 }
 
