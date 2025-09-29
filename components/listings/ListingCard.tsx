@@ -14,7 +14,7 @@ export default function ListingCard({ listing }: ListingCardProps) {
   const listingSlug = listing.slug
 
   return (
-    <Card className="listing-card">
+    <Card className="listing-card group">
       <Link 
         href={`/listings/${listingSlug}`}
         className="absolute inset-0 z-10"
