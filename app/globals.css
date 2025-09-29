@@ -233,7 +233,7 @@
 
   /* Interactive Card Styles */
   .listing-card {
-    @apply cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/20 relative overflow-hidden;
+    @apply cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-primary/40 hover:-translate-y-1 relative overflow-hidden;
   }
 
   /* Hero Animation Styles */

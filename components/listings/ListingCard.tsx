@@ -14,10 +14,10 @@ export default function ListingCard({ listing }: ListingCardProps) {
   const listingSlug = listing.slug
 
   return (
-    <Card className="listing-card group">
+    <Card className="listing-card">
       <Link 
         href={`/listings/${listingSlug}`}
-        className="absolute inset-0 z-10"
+        className="absolute inset-0 z-10 group"
         aria-label={`View ${listing.title} details`}
       >
         <span className="sr-only">View {listing.title} details</span>
