@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription }
 import { getCategories } from '@/utils/supabase/queries'
 import { createListing } from '@/utils/supabase/actions'
 import { CategorySelect } from '@/components/submit/CategorySelect'
+import LogoUpload from '@/components/submit/LogoUpload'
 
 export default async function SubmitPage({
   searchParams
@@ -70,10 +71,7 @@ export default async function SubmitPage({
               <Input id="external_url" name="external_url" type="url" required />
             </div>
 
-            <div className="space-y-2">
-              <label className="label" htmlFor="logo_url">Logo URL</label>
-              <Input id="logo_url" name="logo_url" type="url" />
-            </div>
+            <LogoUpload name="logo_url" />
 
             <div className="space-y-2">
               <label className="label">Category</label>

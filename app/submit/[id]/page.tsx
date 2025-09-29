@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription }
 import { getCategories } from '@/utils/supabase/queries'
 import { updateListing } from '@/utils/supabase/actions'
 import { CategorySelect } from '@/components/submit/CategorySelect'
+import LogoUpload from '@/components/submit/LogoUpload'
 import { createClient } from '@/utils/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import { TABLE_NAME } from '@/utils/supabase/queries'
@@ -110,10 +111,7 @@ export default async function EditListingPage({
                 <Input id="external_url" name="external_url" type="url" required defaultValue={listing.external_url} />
               </div>
 
-              <div className="space-y-2">
-                <label className="label" htmlFor="logo_url">Logo URL</label>
-                <Input id="logo_url" name="logo_url" type="url" defaultValue={listing.logo_url || ''} />
-              </div>
+              <LogoUpload name="logo_url" title={listing.title} defaultUrl={listing.logo_url || ''} />
 
               <div className="space-y-2">
                 <label className="label">Category</label>

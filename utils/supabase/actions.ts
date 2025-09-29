@@ -5,6 +5,7 @@ import { createClient as createServerClient } from '@/utils/supabase/server'
 import { TABLE_NAME } from '@/utils/supabase/queries'
 import type { Listing } from '@/types/listing'
 import { generateSlug, normalizeTags, isValidUrl } from '@/app/submit/submitutils'
+import { uploadLogo, deleteLogo } from '@/utils/supabase/storage'
 
 async function ensureUniqueSlug(baseSlug: string): Promise<string> {
   const supabase = await createServerClient()
@@ -33,7 +34,7 @@ export async function createListing(formData: FormData) {
   const blurb = String(formData.get('blurb') || '').trim()
   const description = String(formData.get('description') || '').trim()
   const external_url = String(formData.get('external_url') || '').trim()
-  const logo_url = String(formData.get('logo_url') || '').trim()
+  let logo_url = String(formData.get('logo_url') || '').trim()
   const category = String(formData.get('category') || '').trim()
   const tagsInput = String(formData.get('tags') || '')
 
@@ -47,6 +48,21 @@ export async function createListing(formData: FormData) {
   const tags = normalizeTags(tagsInput)
   const supabase = await createServerClient()
   const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return redirect('/login')
+  }
+
+  // Handle file upload if present
+  const logoFile = formData.get('logo_url_file') as File | null
+  if (logoFile && logoFile.size > 0) {
+    const uploadedUrl = await uploadLogo(logoFile, user.id)
+    if (uploadedUrl) {
+      logo_url = uploadedUrl
+    } else {
+      return redirect('/submit?error=upload_failed')
+    }
+  }
 
   const baseSlug = generateSlug(title)
   const slug = await ensureUniqueSlug(baseSlug)
@@ -63,7 +79,7 @@ export async function createListing(formData: FormData) {
     tags,
     is_featured: false,
     status: 'pending',
-    user_id: user?.id ?? null
+    user_id: user.id
   }
 
   const { error } = await supabase
@@ -101,7 +117,7 @@ export async function updateListing(listingId: string, formData: FormData) {
   const blurb = String(formData.get('blurb') || '').trim()
   const description = String(formData.get('description') || '').trim()
   const external_url = String(formData.get('external_url') || '').trim()
-  const logo_url = String(formData.get('logo_url') || '').trim()
+  let logo_url = String(formData.get('logo_url') || '').trim()
   const category = String(formData.get('category') || '').trim()
   const tagsInput = String(formData.get('tags') || '')
 
@@ -127,11 +143,11 @@ export async function updateListing(listingId: string, formData: FormData) {
     return redirect('/login')
   }
 
-  // First verify the user owns this listing
+  // First verify the user owns this listing and get current logo_url
   console.log('Checking ownership for listing:', listingId, 'user:', user.id)
   const { data: existingListing, error: fetchError } = await supabase
     .from(TABLE_NAME)
-    .select('user_id, slug')
+    .select('user_id, slug, logo_url')
     .eq('id', listingId)
     .single()
 
@@ -146,10 +162,25 @@ export async function updateListing(listingId: string, formData: FormData) {
     return redirect('/dashboard?error=unauthorized')
   }
 
+  // Handle file upload if present
+  const logoFile = formData.get('logo_url_file') as File | null
+  if (logoFile && logoFile.size > 0) {
+    const uploadedUrl = await uploadLogo(logoFile, user.id)
+    if (uploadedUrl) {
+      // Delete old logo if it was stored in our storage
+      if (existingListing.logo_url) {
+        await deleteLogo(existingListing.logo_url)
+      }
+      logo_url = uploadedUrl
+    } else {
+      return redirect('/dashboard?error=upload_failed')
+    }
+  }
+
   // Generate new slug only if title changed
   const baseSlug = generateSlug(title)
   let slug = existingListing.slug
-  
+
   // Check if we need a new slug (title changed)
   if (generateSlug(title) !== existingListing.slug) {
     slug = await ensureUniqueSlug(baseSlug)
@@ -197,10 +228,18 @@ export async function updateListing(listingId: string, formData: FormData) {
 export async function deleteListing(listingId: string) {
   const supabase = await createServerClient()
   const { data: { user } } = await supabase.auth.getUser()
-  
+
   if (!user) {
     return redirect('/login')
   }
+
+  // Get the listing to check for logo that needs cleanup
+  const { data: listing } = await supabase
+    .from(TABLE_NAME)
+    .select('logo_url')
+    .eq('id', listingId)
+    .eq('user_id', user.id)
+    .single()
 
   const { error } = await supabase
     .from(TABLE_NAME)
@@ -212,6 +251,11 @@ export async function deleteListing(listingId: string) {
     console.error('Error deleting listing:', error)
     return redirect('/dashboard?error=delete_failed')
   }
-  
+
+  // Clean up logo file if it was stored in our storage
+  if (listing?.logo_url) {
+    await deleteLogo(listing.logo_url)
+  }
+
   return redirect('/dashboard?deleted=1')
 }
