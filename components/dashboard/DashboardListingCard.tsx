@@ -5,26 +5,24 @@ import { Badge } from "../ui/badge"
 import { Button } from "../ui/button"
 import { Listing } from "@/types/listing"
 import DeleteListingButton from "@/components/dashboard/DeleteListingButton"
+import { getAvatarFallback } from "@/app/submit/submitutils"
 
 interface DashboardListingCardProps {
   listing: Listing
 }
 
 export default function DashboardListingCard({ listing }: DashboardListingCardProps) {
-  const getAvatarFallback = (title: string) => {
-    return title.charAt(0).toUpperCase()
-  }
 
-  const getStatusColor = (status: string | undefined) => {
+  const getStatusClass = (status: string | undefined) => {
     switch (status) {
       case 'approved':
-        return 'bg-green-100 text-green-800 border-green-200'
+        return 'status-approved'
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+        return 'status-pending'
       case 'rejected':
-        return 'bg-red-100 text-red-800 border-red-200'
+        return 'status-rejected'
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200'
+        return 'status-default'
     }
   }
 
@@ -50,8 +48,8 @@ export default function DashboardListingCard({ listing }: DashboardListingCardPr
                     Featured
                   </Badge>
                 )}
-                <Badge 
-                  className={`text-[10px] px-1.5 py-0.5 ${getStatusColor(listing.status)}`}
+                <Badge
+                  className={`text-[10px] px-1.5 py-0.5 ${getStatusClass(listing.status)}`}
                 >
                   {listing.status || 'pending'}
                 </Badge>

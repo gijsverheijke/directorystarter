@@ -3,20 +3,18 @@ import { Card, CardContent } from "../ui/card";
 import SafeAvatar from "../ui/safe-avatar";
 import { Badge } from "../ui/badge";
 import { Listing } from "@/types/listing";
+import { getAvatarFallback } from "@/app/submit/submitutils";
 
 interface ListingCardProps {
   listing: Listing;
 }
 
 export default function ListingCard({ listing }: ListingCardProps) {
-  const getAvatarFallback = (title: string) => {
-    return title.charAt(0).toUpperCase();
-  };
 
   const listingSlug = listing.slug
 
   return (
-    <Card className="cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/20 group relative overflow-hidden">
+    <Card className="listing-card">
       <Link 
         href={`/listings/${listingSlug}`}
         className="absolute inset-0 z-10"

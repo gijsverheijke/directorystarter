@@ -1,9 +1,10 @@
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 export default function SubmitButton() {
   return (
     <Button variant="secondary" asChild>
-      <a href="/submit">+ Submit</a>
+      <Link href="/submit">+ Submit</Link>
     </Button>
   );
 }

@@ -32,4 +32,8 @@ export function isValidUrl(url: string): boolean {
   }
 }
 
+export function getAvatarFallback(title: string): string {
+  return title.charAt(0).toUpperCase()
+}
+
 

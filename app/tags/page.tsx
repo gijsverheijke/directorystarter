@@ -1,6 +1,7 @@
 import { getAllListings } from '@/utils/supabase/queries'
 import BrowseBadge from '@/components/ui/browse-badge'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import { generateSlug } from '@/app/submit/submitutils'
 
 export const metadata = {
   title: 'Tags - Directory Starter',
@@ -12,12 +13,12 @@ export const metadata = {
 }
 
 export default async function TagsPage() {
-  const listings = await getAllListings()
-  
+  const { listings } = await getAllListings()
+
   // Get unique tags with counts
   const tagData = listings.reduce((acc, listing) => {
     (listing.tags || []).forEach(tag => {
-      const slug = tag.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+      const slug = generateSlug(tag)
       if (!acc[tag]) {
         acc[tag] = {
           name: tag,

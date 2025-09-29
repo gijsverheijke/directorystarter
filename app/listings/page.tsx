@@ -58,7 +58,7 @@ export default async function ListingsPage() {
               {featuredListings.length} featured
             </Badge>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="listing-grid">
             {featuredListings.map((listing) => (
               <ListingCard key={listing.id} listing={listing} />
             ))}
@@ -69,7 +69,7 @@ export default async function ListingsPage() {
       {regularListings.length > 0 && (
         <div>
           <h2 className="text-2xl font-semibold section-spacing">All Listings</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="listing-grid">
             {regularListings.map((listing) => (
               <ListingCard key={listing.id} listing={listing} />
             ))}

@@ -2,6 +2,7 @@ import { getCategories } from '@/utils/supabase/queries'
 import { rights } from '@/lib/keycopy'
 import { ThemeSwitch } from '@/components/ui/theme-switch'
 import Link from 'next/link'
+import { generateSlug } from '@/app/submit/submitutils'
 
 export default async function Footer() {
   // Get unique categories from the database
@@ -10,13 +11,13 @@ export default async function Footer() {
   // Generate category data with slugs
   const categories = categoryNames.map(category => ({
     name: category,
-    slug: category.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+    slug: generateSlug(category)
   })).sort((a, b) => a.name.localeCompare(b.name))
 
   return (
     <footer className="border-t bg-muted/50">
       <div className="container-spacing py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Company Info */}
           <div className="md:col-span-1">
             <p className="text-sm text-muted-foreground mb-4">

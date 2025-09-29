@@ -5,13 +5,14 @@ import ListingCard from '@/components/listings/ListingCard'
 import { Tag } from 'lucide-react'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import Link from 'next/link'
+import { generateSlug } from '@/app/submit/submitutils'
 
 // Generate static params for all tags at build time
 export async function generateStaticParams() {
   const uniqueTags = await getTags()
   
   return uniqueTags.map((tag) => ({
-    tag: tag.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+    tag: generateSlug(tag)
   }))
 }
 
@@ -21,10 +22,10 @@ export async function generateMetadata({ params }: { params: Promise<{ tag: stri
   const tagSlug = tag
   const tagName = tagSlug.replace(/-/g, ' ')
   
-  const allListings = await getAllListings()
+  const { listings: allListings } = await getAllListings()
   const listingsWithTag = allListings.filter(
     listing => (listing.tags || []).some(tag => 
-      tag.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === tagSlug
+      generateSlug(tag) === tagSlug
     )
   )
 
@@ -50,10 +51,10 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
   const tagSlug = tag
   const tagName = tagSlug.replace(/-/g, ' ')
   
-  const allListings = await getAllListings()
+  const { listings: allListings } = await getAllListings()
   const listingsWithTag = allListings.filter(
     listing => (listing.tags || []).some(tag => 
-      tag.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === tagSlug
+      generateSlug(tag) === tagSlug
     )
   )
 
@@ -85,7 +86,7 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="listing-grid">
         {listingsWithTag.map((listing) => (
           <ListingCard key={listing.id} listing={listing} />
         ))}

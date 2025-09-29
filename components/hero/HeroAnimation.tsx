@@ -44,7 +44,7 @@ export default function HeroAnimation({ children }: HeroAnimationProps) {
         }}
       />
       <motion.div
-        className="absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-chart-3/25 blur-2xl"
+        className="hero-orb-center"
         animate={{
           scale: [1, 1.5, 1],
           rotate: [0, 180, 360],

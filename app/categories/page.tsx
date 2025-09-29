@@ -1,6 +1,7 @@
 import { getAllListings } from '@/utils/supabase/queries'
 import BrowseBadge from '@/components/ui/browse-badge'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import { generateSlug } from '@/app/submit/submitutils'
 
 export const metadata = {
   title: 'Categories - Directory Starter',
@@ -12,8 +13,8 @@ export const metadata = {
 }
 
 export default async function CategoriesPage() {
-  const listings = await getAllListings()
-  
+  const { listings } = await getAllListings()
+
   // Get unique categories with counts
   const categoryData = listings.reduce((acc, listing) => {
     const category = listing.category
@@ -22,7 +23,7 @@ export default async function CategoriesPage() {
         name: category,
         count: 0,
         featuredCount: 0,
-        slug: category.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+        slug: generateSlug(category)
       }
     }
     acc[category].count++

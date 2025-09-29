@@ -39,7 +39,7 @@ export default async function SearchPage({
         </div>
         
         {query && (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-5">
             <p className="text-muted-foreground text-lg">
               {results.length === 0 
                 ? `No results found for "${query}"`
@@ -56,7 +56,7 @@ export default async function SearchPage({
       </div>
 
       {results.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="listing-grid">
           {results.map((listing) => (
             <ListingCard key={listing.id} listing={listing} />
           ))}
@@ -68,7 +68,7 @@ export default async function SearchPage({
           <p className="text-muted-foreground text-lg mb-4">
             Try searching with different keywords or browse our categories.
           </p>
-          <div className="flex gap-3 justify-center">
+          <div className="flex gap-5 justify-center">
             <Link
               href="/listings"
               className="text-primary hover:underline"

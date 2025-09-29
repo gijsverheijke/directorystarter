@@ -4,13 +4,14 @@ import { Badge } from '@/components/ui/badge'
 import ListingCard from '@/components/listings/ListingCard'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import Link from 'next/link'
+import { generateSlug } from '@/app/submit/submitutils'
 
 // Generate static params for all categories at build time
 export async function generateStaticParams() {
   const categories = await getCategories()
   
   return categories.map((category) => ({
-    category: category.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+    category: generateSlug(category)
   }))
 }
 
@@ -20,9 +21,9 @@ export async function generateMetadata({ params }: { params: { category: string 
   const categoryName = categorySlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
   
   // Find the actual category by matching the slug
-  const allListings = await getAllListings()
+  const { listings: allListings } = await getAllListings()
   const listingsInCategory = allListings.filter(
-    listing => listing.category.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === categorySlug
+    listing => generateSlug(listing.category) === categorySlug
   )
 
   if (listingsInCategory.length === 0) {
@@ -47,9 +48,9 @@ export default async function CategoryPage({ params }: { params: { category: str
   const categoryName = categorySlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
   
   // Find the actual category by matching the slug
-  const allListings = await getAllListings()
+  const { listings: allListings } = await getAllListings()
   const listingsInCategory = allListings.filter(
-    listing => listing.category.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === categorySlug
+    listing => generateSlug(listing.category) === categorySlug
   )
 
   if (listingsInCategory.length === 0) {
@@ -77,7 +78,7 @@ export default async function CategoryPage({ params }: { params: { category: str
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="listing-grid">
         {listingsInCategory.map((listing) => (
           <ListingCard key={listing.id} listing={listing} />
         ))}

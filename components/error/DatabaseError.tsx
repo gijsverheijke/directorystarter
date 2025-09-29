@@ -17,7 +17,7 @@ export default function DatabaseError({
         <p className="text-muted-foreground mb-5 max-w-md">
           {message}
         </p>
-        <div className="flex gap-3">
+        <div className="flex gap-5">
           <Button asChild variant="outline">
             <Link href="/">
               Go Home

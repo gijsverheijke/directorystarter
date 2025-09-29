@@ -209,6 +209,37 @@
   .loading-grid {
     @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5;
   }
+
+  .listing-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5;
+  }
+
+  /* Status Badge Utilities */
+  .status-approved {
+    @apply bg-green-50 text-green-700 border-green-200;
+  }
+
+  .status-pending {
+    @apply bg-yellow-50 text-yellow-700 border-yellow-200;
+  }
+
+  .status-rejected {
+    @apply bg-red-50 text-red-700 border-red-200;
+  }
+
+  .status-default {
+    @apply bg-muted text-muted-foreground border-border;
+  }
+
+  /* Interactive Card Styles */
+  .listing-card {
+    @apply cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/20 group relative overflow-hidden;
+  }
+
+  /* Hero Animation Styles */
+  .hero-orb-center {
+    @apply absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-chart-3/25 blur-2xl;
+  }
 }
 
 @layer base {
