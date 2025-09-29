@@ -14,29 +14,40 @@ export function SubmitForm({ action, className, children, buttonText = 'Submit l
   const [isValid, setIsValid] = React.useState(false)
   const formRef = React.useRef<HTMLFormElement | null>(null)
 
-  const handleChange = React.useCallback(() => {
+  const checkFormValidity = React.useCallback(() => {
     const form = formRef.current
-    if (!form) return
-    setIsValid(form.checkValidity())
+    if (!form) return false
+
+    // Use a timeout to ensure all input events have been processed
+    setTimeout(() => {
+      setIsValid(form.checkValidity())
+    }, 0)
+
+    return form.checkValidity()
   }, [])
 
   React.useEffect(() => {
     const form = formRef.current
     if (!form) return
-    setIsValid(form.checkValidity())
-    const handler = () => setIsValid(form.checkValidity())
+
+    // Initial validation check
+    checkFormValidity()
+
+    // Add event listeners for form validation
+    const handler = () => checkFormValidity()
     form.addEventListener('input', handler)
     form.addEventListener('change', handler)
+
     return () => {
       form.removeEventListener('input', handler)
       form.removeEventListener('change', handler)
     }
-  }, [])
+  }, [checkFormValidity])
 
   const { pending } = useFormStatus()
 
   return (
-    <form ref={formRef} action={action} className={className} onChange={handleChange} onInput={handleChange} noValidate>
+    <form ref={formRef} action={action} className={className} noValidate>
       {children}
       <div className="mt-5">
         <LoadingButton disabled={!isValid || pending}>{buttonText}</LoadingButton>

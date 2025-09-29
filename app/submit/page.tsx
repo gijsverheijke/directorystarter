@@ -17,6 +17,16 @@ export default async function SubmitPage({
   const error = typeof sp?.error === 'string' ? sp.error : undefined
   const success = typeof sp?.success === 'string' ? sp.success : undefined
 
+  // Preserve form data from previous submission attempt
+  const formData = {
+    title: typeof sp?.title === 'string' ? sp.title : '',
+    blurb: typeof sp?.blurb === 'string' ? sp.blurb : '',
+    description: typeof sp?.description === 'string' ? sp.description : '',
+    external_url: typeof sp?.external_url === 'string' ? sp.external_url : '',
+    logo_url: typeof sp?.logo_url === 'string' ? sp.logo_url : '',
+    category: typeof sp?.category === 'string' ? sp.category : ''
+  }
+
   return (
     <div className="max-w-3xl mx-auto page-spacing space-y-5">
       <Card className="px-5 py-10">
@@ -39,7 +49,7 @@ export default async function SubmitPage({
 
             <div className="space-y-2">
               <label className="label" htmlFor="title">Title</label>
-              <Input id="title" name="title" required />
+              <Input id="title" name="title" required defaultValue={formData.title} />
             </div>
 
             <div className="space-y-2">
@@ -49,6 +59,7 @@ export default async function SubmitPage({
                 name="blurb"
                 rows={3}
                 required
+                defaultValue={formData.blurb}
                 placeholder="One-liner that sells your resource. Aim for 20–160 characters."
               />
               <p className="caption">Short summary used in listings. Keep it concise.</p>
@@ -61,6 +72,7 @@ export default async function SubmitPage({
                 name="description"
                 rows={6}
                 required
+                defaultValue={formData.description}
                 placeholder="What is it, who is it for, and why is it great? Include key features, pricing (if any), and any unique angles. 3–8 sentences recommended."
               />
               <p className="caption">Provide enough detail for evaluation; avoid marketing fluff.</p>
@@ -68,19 +80,14 @@ export default async function SubmitPage({
 
             <div className="space-y-2">
               <label className="label" htmlFor="external_url">Website</label>
-              <Input id="external_url" name="external_url" type="url" required />
+              <Input id="external_url" name="external_url" type="url" required defaultValue={formData.external_url} />
             </div>
 
-            <LogoUpload name="logo_url" />
+            <LogoUpload name="logo_url" defaultUrl={formData.logo_url} />
 
             <div className="space-y-2">
               <label className="label">Category</label>
-              <CategorySelect name="category" options={categories} required />
-            </div>
-
-            <div className="space-y-2">
-              <label className="label" htmlFor="tags">Tags (comma-separated)</label>
-              <Input id="tags" name="tags" placeholder="tag1, tag2, tag3" />
+              <CategorySelect name="category" options={categories} required defaultValue={formData.category} />
             </div>
           </CardContent>
           <CardFooter className="px-5" />

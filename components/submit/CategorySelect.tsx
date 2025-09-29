@@ -26,7 +26,18 @@ export function CategorySelect({ name, options, required, placeholder = 'Select 
 
   return (
     <>
-      <input ref={hiddenInputRef} type="hidden" name={name} required={required} value={value} />
+      {/* Visually hidden input for form validation */}
+      <input
+        ref={hiddenInputRef}
+        type="text"
+        name={name}
+        required={required}
+        value={value}
+        readOnly
+        className="sr-only absolute -left-[9999px] w-0 h-0 opacity-0 pointer-events-none"
+        tabIndex={-1}
+        aria-hidden="true"
+      />
       <Select value={value || undefined} onValueChange={(v) => setValue(v)}>
         <SelectTrigger className="w-full" aria-invalid={required && !value ? true : undefined}>
           <SelectValue placeholder={placeholder} />

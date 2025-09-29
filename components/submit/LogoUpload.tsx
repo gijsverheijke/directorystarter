@@ -18,7 +18,6 @@ export default function LogoUpload({ name, title = '', defaultUrl = '' }: LogoUp
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string>(defaultUrl)
   const [urlInput, setUrlInput] = useState<string>(defaultUrl)
-  const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {

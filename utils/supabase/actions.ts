@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import { createClient as createServerClient } from '@/utils/supabase/server'
 import { TABLE_NAME } from '@/utils/supabase/queries'
 import type { Listing } from '@/types/listing'
-import { generateSlug, normalizeTags, isValidUrl } from '@/app/submit/submitutils'
+import { generateSlug, isValidUrl } from '@/app/submit/submitutils'
 import { uploadLogo, deleteLogo } from '@/utils/supabase/storage'
 
 async function ensureUniqueSlug(baseSlug: string): Promise<string> {
@@ -36,16 +36,28 @@ export async function createListing(formData: FormData) {
   const external_url = String(formData.get('external_url') || '').trim()
   let logo_url = String(formData.get('logo_url') || '').trim()
   const category = String(formData.get('category') || '').trim()
-  const tagsInput = String(formData.get('tags') || '')
+
+  // Helper function to preserve form data on error
+  const redirectWithData = (error: string) => {
+    const params = new URLSearchParams({
+      error,
+      title,
+      blurb,
+      description,
+      external_url,
+      logo_url,
+      category
+    })
+    return redirect(`/submit?${params.toString()}`)
+  }
 
   if (!title || !blurb || !description || !external_url || !category) {
-    return redirect('/submit?error=missing_required')
+    return redirectWithData('missing_required')
   }
   if (!isValidUrl(external_url) || (logo_url && !isValidUrl(logo_url))) {
-    return redirect('/submit?error=invalid_url')
+    return redirectWithData('invalid_url')
   }
 
-  const tags = normalizeTags(tagsInput)
   const supabase = await createServerClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -60,7 +72,7 @@ export async function createListing(formData: FormData) {
     if (uploadedUrl) {
       logo_url = uploadedUrl
     } else {
-      return redirect('/submit?error=upload_failed')
+      return redirectWithData('upload_failed')
     }
   }
 
@@ -76,7 +88,7 @@ export async function createListing(formData: FormData) {
     external_url,
     logo_url,
     category,
-    tags,
+    tags: [], // Admin will add tags upon approval
     is_featured: false,
     status: 'pending',
     user_id: user.id
@@ -88,7 +100,7 @@ export async function createListing(formData: FormData) {
 
   if (error) {
     console.error('Error submitting listing:', error)
-    return redirect('/submit?error=insert_failed')
+    return redirectWithData('insert_failed')
   }
   return redirect('/?submitted=1')
 }
@@ -112,14 +124,13 @@ export async function getUserListings(userId: string): Promise<Listing[]> {
 export async function updateListing(listingId: string, formData: FormData) {
   console.log('=== UPDATE LISTING START ===')
   console.log('Listing ID:', listingId)
-  
+
   const title = String(formData.get('title') || '').trim()
   const blurb = String(formData.get('blurb') || '').trim()
   const description = String(formData.get('description') || '').trim()
   const external_url = String(formData.get('external_url') || '').trim()
   let logo_url = String(formData.get('logo_url') || '').trim()
   const category = String(formData.get('category') || '').trim()
-  const tagsInput = String(formData.get('tags') || '')
 
   console.log('Form data:', { title, blurb, category, external_url })
 
@@ -131,8 +142,6 @@ export async function updateListing(listingId: string, formData: FormData) {
     console.log('Invalid URL')
     return redirect('/dashboard?error=invalid_url')
   }
-
-  const tags = normalizeTags(tagsInput)
   const supabase = await createServerClient()
   const { data: { user }, error: userError } = await supabase.auth.getUser()
   
@@ -194,7 +203,6 @@ export async function updateListing(listingId: string, formData: FormData) {
     external_url,
     logo_url,
     category,
-    tags,
     status: 'pending' // Reset to pending when edited
   }
 
