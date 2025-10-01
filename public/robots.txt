@@ -1,0 +1,11 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow private/admin pages
+Disallow: /dashboard
+Disallow: /submit
+Disallow: /api/
+
+# Sitemap location
+Sitemap: ${process.env.NEXT_PUBLIC_SITE_URL}/sitemap.xml
