@@ -39,7 +39,7 @@ A modern, production-ready Next.js 15 starter template for building directory an
 
 1. **Clone or fork this repository**
    ```bash
-   git clone https://github.com/yourusername/directorystarter.git
+   git clone https://github.com/gijsverheijke/directorystarter.git
    cd directorystarter
    ```
 
