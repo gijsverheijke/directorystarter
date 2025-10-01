@@ -1,16 +1,9 @@
 # Directory Starter
 
-A modern, production-ready Next.js 15 starter template for building directory and catalog websites. Built with TypeScript, Tailwind CSS, and Supabase, this template provides everything you need to launch a fully-featured directory site.
+This is a modern, simple directory template for Next.js with an MDX blog section, and Supabase auth with Magiclinks for submissions. 
 
-## Features
+The Directory is fully server rendered for SEO / AIO, and has simple full text search built-in (using Supabase ts-vector). 
 
-✨ **Core Functionality**
-- 🏠 Dynamic directory listings with search, filtering, and categorization
-- 📝 User submission system with authentication
-- 🎨 Category and tag-based organization
-- 📱 Fully responsive design with dark mode support
-- 🔍 Full-text search with SEO optimization
-- 📰 MDX-based blog system
 
 🛠️ **Technical Stack**
 - **Framework**: Next.js 15 with App Router and Turbopack
@@ -21,19 +14,11 @@ A modern, production-ready Next.js 15 starter template for building directory an
 - **Authentication**: Supabase Auth (magic link only)
 - **Content**: MDX support for blog posts
 
-🚀 **Production Ready**
-- SEO optimized with dynamic sitemap and robots.txt
-- Server-side rendering for optimal performance
-- Type-safe database queries
-- Comprehensive RLS policies for data security
-
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ installed
 - A Supabase account ([sign up free](https://supabase.com))
-- Git installed
 
 ### Installation
 
@@ -160,40 +145,11 @@ The blog uses a simple MDX-based system:
 3. Write your content in Markdown
 4. Deploy - the post is automatically added to the sitemap
 
-No frontmatter or complex configuration needed!
+No frontmatter or complex configuration needed! These blog posts are rendered at build time meaning they are super SEO friendly.
 
 ### FAQ Section
 
 Edit `lib/faq.md` to customize your FAQ section. The content is rendered automatically in the FAQ component.
-
-## Database Schema
-
-The core listing table includes:
-
-- **id**: UUID primary key
-- **title**: Listing title (becomes page title and meta title)
-- **blurb**: Short description (becomes meta description)
-- **slug**: URL-friendly identifier (immutable after creation)
-- **description**: Full description
-- **external_url**: Link to the resource
-- **logo_url**: Optional logo image
-- **category**: Primary category
-- **tags**: Array of tags (JSONB)
-- **status**: `pending`, `approved`, or `rejected`
-- **is_featured**: Boolean for featured listings
-- **user_id**: Owner's UUID (for edit permissions)
-- **created_at**, **updated_at**: Timestamps
-
-See `schema.sql` for the complete schema including indexes and RLS policies.
-
-## Development Commands
-
-```bash
-npm run dev     # Start development server with Turbopack
-npm run build   # Build for production
-npm start       # Start production server
-npm run lint    # Run ESLint
-```
 
 ## Authentication Flow
 
@@ -205,7 +161,7 @@ This template uses Supabase Auth with magic links only:
 4. Submit their listing
 5. Access `/dashboard` to manage submissions
 
-Listings start as `pending` and require admin approval to become `approved` and visible publicly.
+Listings start as `pending` and require admin approval to become `approved` and visible publicly. Approvals currently need to be done from within the Supabase interface. 
 
 ## Row Level Security (RLS)
 
@@ -246,7 +202,6 @@ This template includes:
 - ✅ Robots.txt configuration
 - ✅ Server-side rendering for all pages
 - ✅ Proper meta tags and Open Graph support
-- ✅ Full-text search indexes
 - ⚠️ Update `public/robots.txt` with your production URL
 - ⚠️ Add your logo as `/public/og-image.png` for social sharing
 
@@ -260,7 +215,6 @@ MIT License - see [LICENSE.md](LICENSE.md) for details.
 
 ## Support
 
-- 📖 Check the `/docs` folder for detailed documentation
 - 🐛 Report issues on GitHub
 - 💬 Ask questions in GitHub Discussions
 
@@ -275,4 +229,7 @@ Built with:
 
 ---
 
-Made with ❤️ for the directory builder community
+Made with ❤️ by Gijs Verheijke. In 2024 I learned to code with AI, and now I'm building things by myself. 
+- www.magicdoor.ai
+- www.gijsverheijke.com
+- this directory template
