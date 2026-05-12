@@ -1,20 +1,38 @@
 import { createClient } from '@supabase/supabase-js'
 import { Listing } from '@/types/listing'
+import { getSupabaseConfig, getSupabaseConfigIssue } from './env'
 
 // Table name constant - change this for different directory instances
 export const TABLE_NAME = 'test_directory'
 
+const supabaseConfigIssue = getSupabaseConfigIssue()
+const supabaseConfig = getSupabaseConfig()
+
 // Create a single supabase client for interacting with your database
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!, 
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+const supabase = supabaseConfigIssue
+  ? null
+  : createClient(supabaseConfig.url, supabaseConfig.key)
+let didWarnAboutSkippedSupabase = false
+
+function getClient(queryName: string) {
+  if (!supabase && !didWarnAboutSkippedSupabase) {
+    console.warn(`${queryName} skipped: ${supabaseConfigIssue}`)
+    didWarnAboutSkippedSupabase = true
+  }
+
+  return supabase
+}
 
 
 
 // Get all approved listings
 export async function getAllListings(): Promise<{ listings: Listing[], error?: string }> {
-  const { data, error } = await supabase
+  const client = getClient('getAllListings')
+  if (!client) {
+    return { listings: [] }
+  }
+
+  const { data, error } = await client
     .from(TABLE_NAME)
     .select('*')
     .eq('status', 'approved')
@@ -30,7 +48,12 @@ export async function getAllListings(): Promise<{ listings: Listing[], error?: s
 
 // Get featured listings
 export async function getFeaturedListings(): Promise<Listing[]> {
-  const { data, error } = await supabase
+  const client = getClient('getFeaturedListings')
+  if (!client) {
+    return []
+  }
+
+  const { data, error } = await client
     .from(TABLE_NAME)
     .select('*')
     .eq('status', 'approved')
@@ -47,7 +70,12 @@ export async function getFeaturedListings(): Promise<Listing[]> {
 
 // Get listing by slug
 export async function getListingBySlug(slug: string): Promise<{ listing: Listing | null, error?: string, notFound?: boolean }> {
-  const { data, error } = await supabase
+  const client = getClient('getListingBySlug')
+  if (!client) {
+    return { listing: null, notFound: true }
+  }
+
+  const { data, error } = await client
     .from(TABLE_NAME)
     .select('*')
     .eq('slug', slug)
@@ -70,7 +98,12 @@ export async function getListingBySlug(slug: string): Promise<{ listing: Listing
 
 // Get listings by category
 export async function getListingsByCategory(category: string): Promise<Listing[]> {
-  const { data, error } = await supabase
+  const client = getClient('getListingsByCategory')
+  if (!client) {
+    return []
+  }
+
+  const { data, error } = await client
     .from(TABLE_NAME)
     .select('*')
     .eq('category', category)
@@ -87,7 +120,12 @@ export async function getListingsByCategory(category: string): Promise<Listing[]
 
 // Get listings by tag
 export async function getListingsByTag(tag: string): Promise<Listing[]> {
-  const { data, error } = await supabase
+  const client = getClient('getListingsByTag')
+  if (!client) {
+    return []
+  }
+
+  const { data, error } = await client
     .from(TABLE_NAME)
     .select('*')
     .contains('tags', [tag])
@@ -104,7 +142,12 @@ export async function getListingsByTag(tag: string): Promise<Listing[]> {
 
 // Search listings by title and description
 export async function searchListings(query: string): Promise<Listing[]> {
-  const { data, error } = await supabase
+  const client = getClient('searchListings')
+  if (!client) {
+    return []
+  }
+
+  const { data, error } = await client
     .from(TABLE_NAME)
     .select('*')
     .or(`title.ilike.%${query}%,description.ilike.%${query}%,blurb.ilike.%${query}%`)
@@ -121,7 +164,12 @@ export async function searchListings(query: string): Promise<Listing[]> {
 
 // Get all unique categories
 export async function getCategories(): Promise<string[]> {
-  const { data, error } = await supabase
+  const client = getClient('getCategories')
+  if (!client) {
+    return []
+  }
+
+  const { data, error } = await client
     .from(TABLE_NAME)
     .select('category')
     .eq('status', 'approved')
@@ -138,7 +186,12 @@ export async function getCategories(): Promise<string[]> {
 
 // Get all unique tags
 export async function getTags(): Promise<string[]> {
-  const { data, error } = await supabase
+  const client = getClient('getTags')
+  if (!client) {
+    return []
+  }
+
+  const { data, error } = await client
     .from(TABLE_NAME)
     .select('tags')
     .eq('status', 'approved')
@@ -156,7 +209,12 @@ export async function getTags(): Promise<string[]> {
 
 // Get recent listings (limit configurable)
 export async function getRecentListings(limit: number = 10): Promise<Listing[]> {
-  const { data, error } = await supabase
+  const client = getClient('getRecentListings')
+  if (!client) {
+    return []
+  }
+
+  const { data, error } = await client
     .from(TABLE_NAME)
     .select('*')
     .eq('status', 'approved')
@@ -176,17 +234,22 @@ export async function getListingsWithPagination(
   page: number = 1, 
   pageSize: number = 12
 ): Promise<{ listings: Listing[], total: number, hasMore: boolean }> {
+  const client = getClient('getListingsWithPagination')
+  if (!client) {
+    return { listings: [], total: 0, hasMore: false }
+  }
+
   const from = (page - 1) * pageSize
   const to = from + pageSize - 1
 
   // Get total count
-  const { count } = await supabase
+  const { count } = await client
     .from(TABLE_NAME)
     .select('*', { count: 'exact', head: true })
     .eq('status', 'approved')
 
   // Get paginated data
-  const { data, error } = await supabase
+  const { data, error } = await client
     .from(TABLE_NAME)
     .select('*')
     .eq('status', 'approved')
@@ -207,6 +270,4 @@ export async function getListingsWithPagination(
     hasMore
   }
 }
-
-
 

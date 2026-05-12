@@ -1,6 +1,5 @@
 import path from 'path'
 import { promises as fsPromises } from 'fs'
-import Breadcrumbs from '@/components/Breadcrumbs'
 
 interface BlogPost {
   slug: string
@@ -51,37 +50,29 @@ export default async function BlogPage() {
   const posts = await getBlogPosts()
   
   return (
-    <div className="container-spacing">
-      <div className="section-spacing">
-        <Breadcrumbs breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Blog', href: '/blog' }
-        ]} />
-      </div>
-      <div className="section-spacing">
-        <h1 className="text-4xl font-bold element-spacing">Blog</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {posts.map((post) => (
-            <a 
-              key={post.slug} 
-              href={`/blog/${post.slug}`}
-              className="block border border-border rounded-lg p-5 hover:border-primary hover:bg-muted/50 transition-all duration-200 group cursor-pointer"
-            >
-              <article className="cursor-pointer">
-                <h2 className="text-xl font-semibold element-spacing group-hover:text-primary transition-colors cursor-pointer">
-                  {post.title}
-                </h2>
-                <time className="text-sm text-muted-foreground cursor-pointer">
-                  {new Date(post.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </time>
-              </article>
-            </a>
-          ))}
-        </div>
+    <div>
+      <h1 className="text-4xl font-bold element-spacing">Blog</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {posts.map((post) => (
+          <a
+            key={post.slug}
+            href={`/blog/${post.slug}`}
+            className="block border border-border rounded-lg p-5 hover:border-primary hover:bg-muted/50 transition-all duration-200 group cursor-pointer"
+          >
+            <article className="cursor-pointer">
+              <h2 className="text-xl font-semibold element-spacing group-hover:text-primary transition-colors cursor-pointer">
+                {post.title}
+              </h2>
+              <time className="text-sm text-muted-foreground cursor-pointer">
+                {new Date(post.date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </time>
+            </article>
+          </a>
+        ))}
       </div>
     </div>
   )

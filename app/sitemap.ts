@@ -51,7 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Listing pages
   const listingPages: MetadataRoute.Sitemap = listings.map((listing) => ({
     url: `${baseUrl}/listings/${listing.slug}`,
-    lastModified: new Date(listing.updated_at || listing.created_at),
+    lastModified: new Date(listing.updated_at ?? listing.created_at ?? Date.now()),
     changeFrequency: 'weekly' as const,
     priority: 0.9,
   }))
