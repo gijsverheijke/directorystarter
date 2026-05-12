@@ -1,7 +1,6 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
 import { Sun, Moon, Monitor } from 'lucide-react'
 
 const THEMES_OPTIONS = [
@@ -23,19 +22,10 @@ const THEMES_OPTIONS = [
 ]
 
 export function ThemeSwitch() {
-  const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return null
-  }
-
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1" suppressHydrationWarning>
       {THEMES_OPTIONS.map((option) => (
         <button
           key={option.id}

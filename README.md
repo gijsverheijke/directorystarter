@@ -6,7 +6,7 @@ The Directory is fully server rendered for SEO / AIO, and has simple full text s
 
 
 🛠️ **Technical Stack**
-- **Framework**: Next.js 15 with App Router and Turbopack
+- **Framework**: Next.js 16 with App Router and Turbopack
 - **Language**: TypeScript with strict mode
 - **Styling**: Tailwind CSS v4 with CSS variables
 - **Database**: Supabase with Row Level Security
@@ -184,7 +184,7 @@ The database uses RLS policies to secure data:
 
 ### Other Platforms
 
-This is a standard Next.js 15 application and can be deployed to any platform supporting Node.js 18+:
+This is a standard Next.js 16 application and can be deployed to any platform supporting modern Node.js LTS runtimes:
 
 - Netlify
 - Cloudflare Pages
