@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
+import { hasUsableSupabaseConfig } from '@/utils/supabase/env'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import {
@@ -11,6 +12,16 @@ import {
 import { UserIcon } from 'lucide-react'
 
 export default async function UserNav() {
+  if (!hasUsableSupabaseConfig()) {
+    return (
+      <Link href="/login">
+        <Button variant="ghost" size="sm">
+          Sign In
+        </Button>
+      </Link>
+    )
+  }
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 

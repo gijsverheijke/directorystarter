@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
+import { hasUsableSupabaseConfig } from '@/utils/supabase/env'
 import { getUserListings } from '@/utils/supabase/actions'
 import { redirect } from 'next/navigation'
 import Breadcrumbs from '@/components/Breadcrumbs'
@@ -21,6 +22,10 @@ export default async function DashboardPage({
     deleted?: string
   }>
 }) {
+  if (!hasUsableSupabaseConfig()) {
+    redirect('/login')
+  }
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
